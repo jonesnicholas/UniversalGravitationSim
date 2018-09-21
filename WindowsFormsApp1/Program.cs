@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            RenderEngine rend = new RenderEngine();
+            Simulation sim = new Simulation(rend);
+            FormWindow mainWindow = new FormWindow(sim);
+            sim.formWindow = mainWindow;
+            sim.initialize();
+            mainWindow.Size = new Size(400, 300);
+            Application.Run(mainWindow);
+        }
+    }
+}
