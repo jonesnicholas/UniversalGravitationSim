@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,22 +23,48 @@ namespace WindowsFormsApp1
             this.InitializeComponent();
             this.frameTimer.Tick += new EventHandler(this.frame_Timer_Tick);
             double targetFPS = 120;
-            this.frameTimer.Interval = (int)Math.Ceiling(1000.0/targetFPS);
+            this.frameTimer.Interval = (int)Math.Ceiling(1000.0 / targetFPS);
             this.frameTimer.Enabled = true;
             this.frameTimer.Start();
             DoubleBuffered = true;
             this.MouseWheel += formWindow_MouseWheel;
             this.KeyPress += formWindow_KeyPressed;
+            Application.Idle += HandleApplicationIdle;
             this.Focus();
         }
 
         void frame_Timer_Tick(object sender, EventArgs e)
         {
-            if (!simulation.play)
+            this.Invalidate();
+        }
+
+        void HandleApplicationIdle(object sender, EventArgs e)
+        {
+            while (IsApplicationIdle())
             {
-                this.Invalidate();
+                simulation.update();
             }
         }
+
+        bool IsApplicationIdle()
+        {
+            NativeMessage result;
+            return PeekMessage(out result, IntPtr.Zero, (uint)0, (uint)0, (uint)0) == 0;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct NativeMessage
+        {
+            public IntPtr Handle;
+            public uint Message;
+            public IntPtr WParameter;
+            public IntPtr LParameter;
+            public uint Time;
+            public Point Location;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
 
         private void formWindow_MouseWheel(object sender, MouseEventArgs e)
         {

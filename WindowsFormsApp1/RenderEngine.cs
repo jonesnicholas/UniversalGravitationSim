@@ -16,10 +16,14 @@ namespace WindowsFormsApp1
         public double scale = 4.0;
         public Body focus = null;
         internal Vector baseWindowOffset;
-        internal DateTime lastFrame = DateTime.Now;
+        DateTime lastFrame = DateTime.Now;
+        internal short fpsSmooth = 0;
+        const short smoothFactor = 20;
+        double fps = 0;
         
         public void renderUniverse(List<Body> universe, Form form, PaintEventArgs e, Body newFocus = null)
         {
+            DateTime start = DateTime.Now;
             if (universe == null)
             {
                 return;
@@ -33,12 +37,21 @@ namespace WindowsFormsApp1
             {
                 renderBody(dc,RedPen,body);
             }
-            DateTime thisFrame = DateTime.Now;
-            TimeSpan interval = thisFrame - lastFrame;
-            double ms = interval.TotalMilliseconds;
-            double fps = 1000.0 / ms;
-            Debug.WriteLine("FPS: " + (int)Math.Round(fps, 0));
-            lastFrame = thisFrame;
+            fpsSmooth++;
+            if (fpsSmooth == smoothFactor)
+            {
+                fpsSmooth = 0;
+                double seconds = (DateTime.Now - lastFrame).TotalSeconds;
+                lastFrame = DateTime.Now;
+                fps = Math.Round(smoothFactor / seconds, 1);
+            }
+            Font drawFont = new Font("Arial", 16);
+            SolidBrush drawBrush = new SolidBrush(System.Drawing.Color.Black);
+            float x = 150.0F;
+            float y = 50.0F;
+            StringFormat drawFormat = new StringFormat();
+            dc.DrawString(fps.ToString(), drawFont, drawBrush, 150, 50, drawFormat);
+            Debug.WriteLine(((DateTime.Now)-start).TotalMilliseconds);
         }
 
         public void renderBody(Graphics dc, Pen pen, Body body)

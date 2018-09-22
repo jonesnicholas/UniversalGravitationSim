@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
             {
                 updateEuler(universe, body, dt);
             }
-            checkCollision(universe);
+            //checkCollision(universe);
             foreach (Body body in universe)
             {
                 body.update();

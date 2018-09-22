@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
         internal RenderEngine renderEngine;
         public bool play = false;
         public int simDegree = 1;
+        public double interval = 1.0;
         public FormWindow formWindow;
 
         public Simulation(RenderEngine rEng)
@@ -41,24 +42,16 @@ namespace WindowsFormsApp1
             //universe = new List<Body>() { c1,c2 };
             universe = new List<Body>() { s, j, t, l};
 
-            /*int numAs = 100;
-            Random random = new Random();
-            for (int i=0; i<numAs; i++)
-            {
-                double theta = random.NextDouble() * 4 * Math.Acos(0);
-                double r = random.NextDouble() * 10 + 110;
-                Vector p0 = new Vector(r * Math.Cos(theta), r * Math.Sin(theta), 0);
-                double vMag = Math.Sqrt(center.m / r) * (1 + 0.1 * (1.0 - 2.0 * random.NextDouble()));
-                Vector v0 = new Vector(-p0.y, p0.x, 0);
-                v0 = v0.normal() * vMag;
-
-                v0 *= 0;
-
-                Body atr = new Body(p0.x, p0.y, v0.x, v0.y, 1,0.1);
-                universe.Add(atr);
-            }*/
-
             physics = new Physics();
+        }
+
+        public void update()
+        {
+            double dt = interval / simDegree;
+            for (int i=0; i<simDegree; i++)
+            {
+                physics.update(universe, dt);
+            }
         }
 
         public void render(PaintEventArgs e)
