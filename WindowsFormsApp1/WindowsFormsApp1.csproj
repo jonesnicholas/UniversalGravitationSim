@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RelativeBody.cs" />
     <Compile Include="Body.cs" />
     <Compile Include="FormWindow.cs">
       <SubType>Form</SubType>

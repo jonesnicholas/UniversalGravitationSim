@@ -23,6 +23,12 @@ namespace WindowsFormsApp1
         public bool deletionFlag = false;
 
         #region constructors
+
+        public Body()
+        {
+            //empty
+        }
+
         public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
         {
             p = new Vector(px0, py0, 0);
