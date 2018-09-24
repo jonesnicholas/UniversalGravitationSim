@@ -8,19 +8,45 @@ namespace WindowsFormsApp1
 {
     public class Physics
     {
+        public bool parallel = true;
         public void update(List<Body> universe, double dt)
         {
-            foreach (Body body in universe)
-            {
-                updateEuler(universe, body, dt);
-            }
+            calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
+            updateBodies(universe);
+            removeFlaggedObjects(universe);
+            fixBarycenter(universe);
+        }
+
+        internal void calcBodyTrajectory(List<Body> universe, double dt)
+        {
+            if (parallel)
+            {
+                Parallel.ForEach(universe, body =>
+                {
+                    updateEuler(universe, body, dt);
+                });
+            }
+            else
+            {
+                foreach (Body body in universe)
+                {
+                    updateEuler(universe, body, dt);
+                }
+            }
+        }
+
+        internal void updateBodies(List<Body> universe)
+        {
             foreach (Body body in universe)
             {
                 body.update();
             }
+        }
+
+        internal void removeFlaggedObjects(List<Body> universe)
+        {
             universe = universe.Where(body => !body.deletionFlag).ToList();
-            fixBarycenter(universe);
         }
 
         internal void checkCollision(List<Body> universe)
