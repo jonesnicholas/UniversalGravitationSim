@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,9 @@ namespace WindowsFormsApp1
         public Physics physics;
         internal RenderEngine renderEngine;
         public bool play = false;
-        public int simDegree = 1;
-        public double interval = 1.0;
+        public double simDegree = 100.0;
+        public double interval = 0.01;
+        public double desiredTimeDilation = 100.0;
         public FormWindow formWindow;
 
         public Simulation(RenderEngine rEng)
@@ -47,16 +49,20 @@ namespace WindowsFormsApp1
 
         public void update()
         {
-            double dt = interval / simDegree;
+            DateTime start = DateTime.Now;
+            double dt = interval*desiredTimeDilation / simDegree;
             for (int i=0; i<simDegree; i++)
             {
                 physics.update(universe, dt);
+                renderEngine.updateCount++;
             }
+            double timeInterval = (start - DateTime.Now).TotalSeconds;
+            Debug.WriteLine(timeInterval);
         }
 
         public void render(PaintEventArgs e)
         {
-            renderEngine.renderUniverse(universe,formWindow,e);
+            renderEngine.runRenderEngine(universe,formWindow,e);
         }
     }
 }
