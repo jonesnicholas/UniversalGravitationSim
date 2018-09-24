@@ -30,6 +30,7 @@ namespace WindowsFormsApp1
             focus = newFocus == null ? focus : newFocus;
             baseWindowOffset = new Vector(form.ClientRectangle.Width / 2.0, form.ClientRectangle.Height / 2.0,0);
             Graphics dc = e.Graphics;
+            dc.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Pen RedPen = new Pen(Color.Red, 1);
             dc.DrawRectangle(RedPen, 10, 10, form.ClientRectangle.Width - 20, form.ClientRectangle.Size.Height - 20);
 
