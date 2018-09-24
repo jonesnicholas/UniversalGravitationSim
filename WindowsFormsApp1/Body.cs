@@ -8,6 +8,8 @@ namespace WindowsFormsApp1
 {
     public class Body
     {
+        public string name;
+
         public Vector p;
         public Vector v;
 
@@ -21,26 +23,28 @@ namespace WindowsFormsApp1
         public bool deletionFlag = false;
 
         #region constructors
-        public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false)
+        public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
         {
             p = new Vector(px0, py0, 0);
             v = new Vector(vx0, vy0, 0);
             rho = rho0;
             m = m0;
             pinned = pin;
+            name = lbl;
             initialize();
         }
 
-        public Body(Vector p0, Vector v0, double m0, double rho0 = 1, bool pin = false)
+        public Body(Vector p0, Vector v0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
         {
             p = p0;
             v = v0;
             rho = rho0;
             m = m0;
             pinned = pin;
+            name = lbl;
             initialize();
         }
-        public Body(double px0, double py0, Body center, double m0, double rho0 = 1)
+        public Body(double px0, double py0, Body center, double m0, double rho0 = 1, string lbl = "<>")
         {
             p = new Vector(px0, py0, 0);
             double vMag = Math.Sqrt(center.m / p.mag());
@@ -50,10 +54,11 @@ namespace WindowsFormsApp1
             p += center.p;
             rho = rho0;
             m = m0;
+            name = lbl;
             initialize();
         }
 
-        public Body(Vector p0, Body center, double m0, double rho0 = 1)
+        public Body(Vector p0, Body center, double m0, double rho0 = 1, string lbl = "<>")
         {
             p = p0;
             double vMag = Math.Sqrt(center.m / p0.mag());
@@ -63,6 +68,7 @@ namespace WindowsFormsApp1
             p += center.p;
             rho = rho0;
             m = m0;
+            name = lbl;
             initialize();
         }
         #endregion  
