@@ -33,10 +33,10 @@ namespace WindowsFormsApp1
             Body c1 = new Body(10, 0, 0, 0, 100);
             Body c2 = new Body(-10, 0, 0, 0, 10);
 
-            Body s = new Body(0, 0, 0, 0, 100);
-            Body j = new Body(200, 0, s, 1);
-            Body t = new Body(5, 0, j, 0.01);
-            Body l = new Body(10, 0, j, 0.05);
+            Body s = new Body(0, 0, 0, 0, 100, lbl:"Sol");
+            Body j = new Body(200, 0, s, 1, lbl:"Jool");
+            Body t = new Body(5, 0, j, 0.01, lbl:"Tylo");
+            Body l = new Body(10, 0, j, 0.05, lbl:"Vall");
             
 
             //universe = new List<Body>() { center, a, b };
