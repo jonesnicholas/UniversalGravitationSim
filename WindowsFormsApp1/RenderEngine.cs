@@ -22,7 +22,13 @@ namespace WindowsFormsApp1
         internal double fps = 0;
         internal double ups = 0;
         public volatile int updateCount = 0;
+        bool useRelative;
         
+        public RenderEngine(bool useRel)
+        {
+            useRelative = useRel;
+        }
+
         public void runRenderEngine(List<Body> universe, Form form, PaintEventArgs e, Body newFocus = null)
         {
             DateTime start = DateTime.Now;

@@ -24,7 +24,9 @@ namespace WindowsFormsApp1
             inV = parentBody == null ? new Vector() : inV;
             if (inV == null)
             {
-                
+                Vector pN = p.normal();
+                double mag = Math.Sqrt(parentBody.m / pN.mag());
+                v = mag * (new Vector(-pN.y, pN.x, 0));
             }
             rho = rho0;
             m = m0;

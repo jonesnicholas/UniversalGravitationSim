@@ -18,10 +18,12 @@ namespace WindowsFormsApp1
         public double interval = 0.01;
         public double desiredTimeDilation = 100.0;
         public FormWindow formWindow;
+        bool useRelative;
 
-        public Simulation(RenderEngine rEng)
+        public Simulation(RenderEngine rEng = null, bool useRel = false)
         {
-            renderEngine = rEng ?? new RenderEngine();
+            renderEngine = rEng ?? new RenderEngine(useRel);
+            useRelative = useRel;
         }
 
         public void initialize()
@@ -44,7 +46,7 @@ namespace WindowsFormsApp1
             //universe = new List<Body>() { c1,c2 };
             universe = new List<Body>() { s, j, t, l};
 
-            physics = new Physics();
+            physics = new Physics(useRelative);
         }
 
         public void update()
@@ -57,7 +59,7 @@ namespace WindowsFormsApp1
                 renderEngine.updateCount++;
             }
             double timeInterval = (start - DateTime.Now).TotalSeconds;
-            Debug.WriteLine(timeInterval);
+            //Debug.WriteLine(timeInterval);
         }
 
         public void render(PaintEventArgs e)

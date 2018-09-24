@@ -9,6 +9,13 @@ namespace WindowsFormsApp1
     public class Physics
     {
         public bool parallel = true;
+        bool useRelative;
+
+        public Physics(bool useRel)
+        {
+            useRelative = useRel;
+        }
+
         public void update(List<Body> universe, double dt)
         {
             calcBodyTrajectory(universe, dt);
@@ -95,10 +102,24 @@ namespace WindowsFormsApp1
                 {
                     continue;
                 }
-                Vector dist = other.p - body.p;
+                Vector dist = distance(body,other);
                 a += other.m * dist.normal() / (Math.Pow(dist.m, 2));
             }
             return a;
+        }
+
+        internal Vector distance(Body a, Body b)
+        {
+            Vector dist = new Vector();
+            if (useRelative)
+            {
+
+            }
+            else
+            {
+                dist = b.p - a.p;
+            }
+            return dist;
         }
 
         internal void fixBarycenter(List<Body> universe)
