@@ -8,7 +8,7 @@ namespace WindowsFormsApp1
 {
     public class RelativeBody : Body
     {
-        Body parent;
+        public RelativeBody parent;
 
         #region constructors
 
@@ -35,5 +35,17 @@ namespace WindowsFormsApp1
             initialize();
         }
         #endregion  
+
+        public int parentDepth()
+        {
+            RelativeBody p = (RelativeBody)parent;
+            int output = 1;
+            while (p != null)
+            {
+                p = (RelativeBody)p.parent;
+                output++;
+            }
+            return output;
+        }
     }
 }

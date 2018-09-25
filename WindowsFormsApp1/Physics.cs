@@ -111,15 +111,57 @@ namespace WindowsFormsApp1
         internal Vector distance(Body a, Body b)
         {
             Vector dist = new Vector();
+            if (a == b)
+            {
+                return dist;
+            }
             if (useRelative)
             {
+                RelativeBody ra = (RelativeBody)a;
+                RelativeBody rb = (RelativeBody)b;
 
+                RelativeBody mutualParent = getMutualParent(ra, rb);
+                dist = distanceFromParent(rb, mutualParent) - distanceFromParent(ra, mutualParent);
             }
             else
             {
                 dist = b.p - a.p;
             }
             return dist;
+        }
+
+        internal RelativeBody getMutualParent(RelativeBody a, RelativeBody b)
+        {
+            int depthA = a.parentDepth();
+            int depthB = b.parentDepth();
+            RelativeBody aParent = a.parent;
+            RelativeBody bParent = b.parent;
+            while (depthA > depthB)
+            {
+                depthA--;
+            }
+            while (depthB > depthA)
+            {
+                depthB--;
+            }
+            while (aParent != bParent)
+            {
+                aParent = aParent.parent;
+                bParent = bParent.parent;
+            }
+            return aParent;
+        }
+
+        internal Vector distanceFromParent(RelativeBody body, RelativeBody parent)
+        {
+            RelativeBody par = body.parent;
+            Vector relDis = body.p;
+            while (par != parent)
+            {
+                relDis += par.p;
+                par = par.parent;
+            }
+            return relDis;
         }
 
         internal void fixBarycenter(List<Body> universe)
