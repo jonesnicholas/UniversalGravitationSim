@@ -8,7 +8,7 @@ namespace WindowsFormsApp1
 {
     public class Physics
     {
-        public bool parallel = true;
+        public bool parallel = false;
         bool useRelative;
 
         public Physics(bool useRel)

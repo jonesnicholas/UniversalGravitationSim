@@ -19,13 +19,14 @@ namespace WindowsFormsApp1
             double rho0 = 1, 
             string lbl = "<>")
         {
-            pinned = parentBody == null;
+            parent = parentBody;
+            pinned = parent == null;
             p = inP;
-            inV = parentBody == null ? new Vector() : inV;
+            inV = parent == null ? new Vector() : inV;
             if (inV == null)
             {
                 Vector pN = p.normal();
-                double mag = Math.Sqrt(parentBody.m / pN.mag());
+                double mag = Math.Sqrt(parent.m / pN.mag());
                 v = mag * (new Vector(-pN.y, pN.x, 0));
             }
             rho = rho0;
