@@ -55,7 +55,7 @@ namespace WindowsFormsApp1
             double dt = interval*desiredTimeDilation / simDegree;
             for (int i=0; i<simDegree; i++)
             {
-                physics.update(universe, dt);
+                physics.update(ref universe, dt);
                 renderEngine.updateCount++;
             }
             double timeInterval = (start - DateTime.Now).TotalSeconds;

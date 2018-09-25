@@ -12,8 +12,13 @@ namespace WindowsFormsApp1
 
         #region constructors
 
+        public RelativeBody()
+        {
+            parent = null;
+        }
+
         public RelativeBody(Vector inP, 
-            double m0, 
+            double m0 = 0, 
             Vector inV = null,
             RelativeBody parentBody = null, 
             double rho0 = 1, 
@@ -46,6 +51,42 @@ namespace WindowsFormsApp1
                 output++;
             }
             return output;
+        }
+
+        internal RelativeBody getMutualParent(RelativeBody other)
+        {
+            int depthA = this.parentDepth();
+            int depthB = other.parentDepth();
+            RelativeBody aParent = this.parent;
+            RelativeBody bParent = other.parent;
+            while (depthA > depthB)
+            {
+                depthA--;
+                aParent = aParent.parent;
+            }
+            while (depthB > depthA)
+            {
+                depthB--;
+                bParent = bParent.parent;
+            }
+            while (aParent != bParent)
+            {
+                aParent = aParent.parent;
+                bParent = bParent.parent;
+            }
+            return aParent;
+        }
+
+        internal Vector distanceFromParent(RelativeBody parent)
+        {
+            RelativeBody par = this.parent;
+            Vector relDis = p;
+            while (par != parent)
+            {
+                relDis += par.p;
+                par = par.parent;
+            }
+            return relDis;
         }
     }
 }

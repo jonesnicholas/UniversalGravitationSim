@@ -16,12 +16,12 @@ namespace WindowsFormsApp1
             useRelative = useRel;
         }
 
-        public void update(List<Body> universe, double dt)
+        public void update(ref List<Body> universe, double dt)
         {
             calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
             updateBodies(universe);
-            removeFlaggedObjects(universe);
+            removeFlaggedObjects(ref universe);
             fixBarycenter(universe);
         }
 
@@ -51,7 +51,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        internal void removeFlaggedObjects(List<Body> universe)
+        internal void removeFlaggedObjects(ref List<Body> universe)
         {
             universe = universe.Where(body => !body.deletionFlag).ToList();
         }
@@ -120,48 +120,14 @@ namespace WindowsFormsApp1
                 RelativeBody ra = (RelativeBody)a;
                 RelativeBody rb = (RelativeBody)b;
 
-                RelativeBody mutualParent = getMutualParent(ra, rb);
-                dist = distanceFromParent(rb, mutualParent) - distanceFromParent(ra, mutualParent);
+                RelativeBody mutualParent = ra.getMutualParent(rb);
+                dist = rb.distanceFromParent(mutualParent) - ra.distanceFromParent(mutualParent);
             }
             else
             {
                 dist = b.p - a.p;
             }
             return dist;
-        }
-
-        internal RelativeBody getMutualParent(RelativeBody a, RelativeBody b)
-        {
-            int depthA = a.parentDepth();
-            int depthB = b.parentDepth();
-            RelativeBody aParent = a.parent;
-            RelativeBody bParent = b.parent;
-            while (depthA > depthB)
-            {
-                depthA--;
-            }
-            while (depthB > depthA)
-            {
-                depthB--;
-            }
-            while (aParent != bParent)
-            {
-                aParent = aParent.parent;
-                bParent = bParent.parent;
-            }
-            return aParent;
-        }
-
-        internal Vector distanceFromParent(RelativeBody body, RelativeBody parent)
-        {
-            RelativeBody par = body.parent;
-            Vector relDis = body.p;
-            while (par != parent)
-            {
-                relDis += par.p;
-                par = par.parent;
-            }
-            return relDis;
         }
 
         internal void fixBarycenter(List<Body> universe)
