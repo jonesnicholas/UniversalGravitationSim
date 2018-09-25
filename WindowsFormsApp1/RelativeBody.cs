@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
         public RelativeBody(Vector inP, 
             double m0, 
             Vector inV = null,
-            Body parentBody = null, 
+            RelativeBody parentBody = null, 
             double rho0 = 1, 
             string lbl = "<>")
         {
