@@ -8,6 +8,8 @@ namespace WindowsFormsApp1
 {
     public class Vector
     {
+        static Random random = new Random();
+
         public double x = 0;
         public double y = 0;
         public double z = 0;
@@ -23,6 +25,12 @@ namespace WindowsFormsApp1
         public Vector()
         {
             mUp = false;
+        }
+
+        public static Vector randVect()
+        {
+            //2D only for now
+            return new Vector(random.NextDouble(), random.NextDouble(), 0.0);
         }
 
         public double mag()

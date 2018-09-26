@@ -12,9 +12,15 @@ namespace WindowsFormsApp1
 
         #region constructors
 
-        public RelativeBody()
+        public RelativeBody(double m0 = 0)
         {
             parent = null;
+            m = m0;
+        }
+
+        public RelativeBody(RelativeBody parentBody)
+        {
+            parent = parentBody;
         }
 
         public RelativeBody(Vector inP, 
@@ -27,12 +33,12 @@ namespace WindowsFormsApp1
             parent = parentBody;
             pinned = parent == null;
             p = inP;
-            inV = parent == null ? new Vector() : inV;
-            if (inV == null)
+            v = parent == null ? new Vector() : inV;
+            if (v == null)
             {
                 Vector pN = p.normal();
-                double mag = Math.Sqrt(parent.m / pN.mag());
-                v = mag * (new Vector(-pN.y, pN.x, 0));
+                double mag = Math.Sqrt(parent.m / p.mag());
+                v = mag * (new Vector(-pN.y, pN.x, pN.z));
             }
             rho = rho0;
             m = m0;
@@ -44,7 +50,7 @@ namespace WindowsFormsApp1
         public int parentDepth()
         {
             RelativeBody p = (RelativeBody)parent;
-            int output = 1;
+            int output = 0;
             while (p != null)
             {
                 p = (RelativeBody)p.parent;
@@ -57,8 +63,8 @@ namespace WindowsFormsApp1
         {
             int depthA = this.parentDepth();
             int depthB = other.parentDepth();
-            RelativeBody aParent = this.parent;
-            RelativeBody bParent = other.parent;
+            RelativeBody aParent = this;
+            RelativeBody bParent = other;
             while (depthA > depthB)
             {
                 depthA--;

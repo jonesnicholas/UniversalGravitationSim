@@ -32,8 +32,8 @@ namespace UnitTests
                 for (int i=0; i<numBodies; i++)
                 {
                     Body b = tf ? new Body() : new RelativeBody();
-                    b.p = randVect();
-                    Vector rVecNext = randVect();
+                    b.p = Vector.randVect();
+                    Vector rVecNext = Vector.randVect();
                     newVects.Add(rVecNext);
                     b.pNext = rVecNext;
                     universe.Add(b);
@@ -41,7 +41,7 @@ namespace UnitTests
                 physics.updateBodies(universe);
                 for (int i=0; i<numBodies; i++)
                 {
-                    Assert.AreEqual(newVects[i], universe[i].p);
+                    checkRoughlyEqual(newVects[i], universe[i].p);
                 }
             }
         }
@@ -75,11 +75,11 @@ namespace UnitTests
         public void Physics_Verify_Absolute_Distance()
         {
             Body bodyA = new Body();
-            Vector vecA = randVect();
+            Vector vecA = Vector.randVect();
             bodyA.p = vecA;
 
             Body bodyB = new Body();
-            Vector vecB = randVect();
+            Vector vecB = Vector.randVect();
             bodyB.p = vecB;
 
             Vector manDist = vecB - vecA;
@@ -95,13 +95,13 @@ namespace UnitTests
         public void Physics_Verify_Relative_Distance()
         {
             RelativeBody s = new RelativeBody();
-            Vector p1p = randVect();
+            Vector p1p = Vector.randVect();
             RelativeBody p1 = new RelativeBody(p1p,parentBody:s);
-            Vector p1m1p = randVect();
+            Vector p1m1p = Vector.randVect();
             RelativeBody p1m1 = new RelativeBody(p1m1p, parentBody:p1);
-            Vector p2p = randVect();
+            Vector p2p = Vector.randVect();
             RelativeBody p2 = new RelativeBody(p2p, parentBody:s);
-            Vector p2m1p = randVect();
+            Vector p2m1p = Vector.randVect();
             RelativeBody p2m1 = new RelativeBody(p2m1p, parentBody:p2);
 
             Physics physics = new Physics(true);
@@ -139,11 +139,6 @@ namespace UnitTests
             {
                 Assert.AreEqual(expected.z, actual.z);
             }
-        }
-
-        internal Vector randVect()
-        {
-            return new Vector(random.NextDouble(), random.NextDouble(), random.NextDouble());
         }
     }
 }
