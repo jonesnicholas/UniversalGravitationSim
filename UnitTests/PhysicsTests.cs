@@ -41,7 +41,7 @@ namespace UnitTests
                 physics.updateBodies(universe);
                 for (int i=0; i<numBodies; i++)
                 {
-                    checkRoughlyEqual(newVects[i], universe[i].p);
+                    Assert.IsTrue(newVects[i] == universe[i].p);
                 }
             }
         }
@@ -108,37 +108,19 @@ namespace UnitTests
 
             Vector p1Dp2 = physics.distance(p1, p2);
             Vector p1Dp2EST = p2p - p1p;
-            checkRoughlyEqual(p1Dp2EST, p1Dp2);
+            Assert.IsTrue(p1Dp2EST == p1Dp2);
 
             Vector p1m1Dp2m1 = physics.distance(p1m1, p2m1);
             Vector p1m1Dp2m2EST = p2m1p + p2p - p1m1p - p1p;
-            checkRoughlyEqual(p1m1Dp2m1, p1m1Dp2m2EST);
+            Assert.IsTrue(p1m1Dp2m1 == p1m1Dp2m2EST);
 
             Vector p1Dp2m1 = physics.distance(p1, p2m1);
             Vector p1Dp2m1EST = p2m1p + p2p - p1p;
-            checkRoughlyEqual(p1Dp2m1, p1Dp2m1EST);
+            Assert.IsTrue(p1Dp2m1 == p1Dp2m1EST);
 
             Vector p2m1Dp1 = physics.distance(p2m1, p1);
             Vector p2m1Dp1EST = p1p - p2m1p - p2p;
-            checkRoughlyEqual(p2m1Dp1, p2m1Dp1EST);
-        }
-
-        internal void checkRoughlyEqual(Vector expected, Vector actual)
-        {
-            double scale = Math.Max(expected.mag(), actual.mag());
-            double epsilon = scale*1E-15;
-            if (Math.Abs(expected.x - actual.x) > epsilon)
-            {
-                Assert.AreEqual(expected.x, actual.x);
-            }
-            if (Math.Abs(expected.y - actual.y) > epsilon)
-            {
-                Assert.AreEqual(expected.y, actual.y);
-            }
-            if (Math.Abs(expected.z - actual.z) > epsilon)
-            {
-                Assert.AreEqual(expected.z, actual.z);
-            }
+            Assert.IsTrue(p2m1Dp1 == p2m1Dp1EST);
         }
     }
 }

@@ -13,18 +13,16 @@ namespace WindowsFormsApp1
         public double x = 0;
         public double y = 0;
         public double z = 0;
-        internal double m = 0;
-        bool mUp = true;
+        
 
         public Vector(double x0, double y0, double z0)
         {
             x = x0; y = y0; z = z0;
-            m = mag();
         }
 
         public Vector()
         {
-            mUp = false;
+            // default is zero vector
         }
 
         public static Vector randVect()
@@ -35,12 +33,12 @@ namespace WindowsFormsApp1
 
         public double mag()
         {
-            m = Math.Sqrt(x * x + y * y + z * z);
-            return m;
+            return Math.Sqrt(x * x + y * y + z * z);
         }
 
         public void normalize()
         {
+            double m = mag();
             if (m == 0)
                 return;
             x /= m;
@@ -52,6 +50,7 @@ namespace WindowsFormsApp1
         public Vector normal()
         {
             Vector output = new Vector(x, y, z);
+            double m = mag();
             if (m != 0)
             {
                 output /= m;
@@ -60,6 +59,24 @@ namespace WindowsFormsApp1
         }
 
         #region Operator Overloads
+        public static bool operator ==(Vector a, Vector b)
+        {
+            if (ReferenceEquals(a,b))
+            {
+                return true;
+            }
+            if (ReferenceEquals(a,null) || ReferenceEquals(b,null))
+            {
+                return false;
+            }
+            return checkRoughlyEqual(a, b);
+        }
+
+        public static bool operator !=(Vector a, Vector b)
+        {
+            return !(a == b);
+        }
+
         public static Vector operator +(Vector a, Vector b)
         {
             Vector output = new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
@@ -99,12 +116,30 @@ namespace WindowsFormsApp1
             return output;
         }
 
-
         public static Vector operator -(Vector a, Vector b)
         {
             Vector output = a + (-b);
             return output;
         }
         #endregion
+
+        internal static bool checkRoughlyEqual(Vector expected, Vector actual)
+        {
+            double scale = Math.Max(expected.mag(), actual.mag());
+            double epsilon = scale * 1E-15;
+            if (Math.Abs(expected.x - actual.x) > epsilon)
+            {
+                return false;
+            }
+            if (Math.Abs(expected.y - actual.y) > epsilon)
+            {
+                return false;
+            }
+            if (Math.Abs(expected.z - actual.z) > epsilon)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

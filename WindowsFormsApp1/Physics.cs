@@ -103,7 +103,7 @@ namespace WindowsFormsApp1
                     continue;
                 }
                 Vector dist = distance(body,other);
-                a += other.m * dist.normal() / (Math.Pow(dist.m, 2));
+                a += other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
             }
             return a;
         }
