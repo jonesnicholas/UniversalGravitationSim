@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,10 @@ namespace WindowsFormsApp1
         public void update(ref List<Body> universe, double dt)
         {
             calcBodyTrajectory(universe, dt);
+            if (useRelative)
+            {
+                correctForMovingReferenceFrames(universe.Select(body => (RelativeBody)body).ToList());
+            }
             //checkCollision(universe);
             updateBodies(universe);
             removeFlaggedObjects(ref universe);
@@ -105,6 +110,7 @@ namespace WindowsFormsApp1
                 Vector dist = distance(body,other);
                 a += other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
             }
+            //Debug.WriteLine(body.name + ": " + a.x + " " + a.y + " " + a.z);
             return a;
         }
 
@@ -151,6 +157,11 @@ namespace WindowsFormsApp1
             {
                 body.p -= weightedP;
             }
+        }
+
+        internal void correctForMovingReferenceFrames(List<RelativeBody> universe)
+        {
+
         }
     }
 }

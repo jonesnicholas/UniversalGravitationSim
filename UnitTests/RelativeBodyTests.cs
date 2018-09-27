@@ -20,7 +20,7 @@ namespace UnitTests
             Vector v0 = Vector.randVect();
             double rho = random.NextDouble();
             string name = "test";
-            RelativeBody relBody = new RelativeBody(p0, mass, v0, empty, rho, name);
+            RelativeBody relBody = new RelativeBody(p0, empty, mass, v0, rho, name);
             Assert.IsTrue(p0 ==relBody.p);
             Assert.AreEqual(mass, relBody.m);
             Assert.IsTrue(v0 == relBody.v);
@@ -47,7 +47,7 @@ namespace UnitTests
                 p0.y *= yPos ? 1 : -1;
                 checkRoughlyEqual(separation, p0.mag());
 
-                RelativeBody relBody = new RelativeBody(p0, 1, parentBody: center);
+                RelativeBody relBody = new RelativeBody(p0,center, 1);
                 checkRoughlyEqual(Math.Sqrt(centerMass / separation), relBody.v.mag());
                 checkRoughlyEqual(0, relBody.p * relBody.v);
             }

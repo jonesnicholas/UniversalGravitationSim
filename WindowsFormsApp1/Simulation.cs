@@ -28,23 +28,34 @@ namespace WindowsFormsApp1
 
         public void initialize()
         {
-            Body center = new Body(0, 0, 0, 0, 100,1, true);
-            Body a = new Body(200,0,center,1,10);
-            //Body b = new Body(105, 0, 0, 1 + Math.Sqrt(0.2), 0.1);
+            if (useRelative)
+            {
+                RelativeBody sr = new RelativeBody(100, "Sol");
+                RelativeBody jr = new RelativeBody(200, 0, sr, 1, lbl: "Jool");
+                RelativeBody tr = new RelativeBody(5, 0, jr, 0.01, lbl: "Tylo");
+                RelativeBody lr = new RelativeBody(10, 0, jr, 0.05, lbl: "Vall");
+                
+                universe = new List<Body>() { sr, jr, tr, lr };
+            }
+            else
+            {
+                Body center = new Body(0, 0, 0, 0, 100, 1, true);
+                Body a = new Body(200, 0, center, 1, 10);
+                //Body b = new Body(105, 0, 0, 1 + Math.Sqrt(0.2), 0.1);
 
-            Body c1 = new Body(10, 0, 0, 0, 100);
-            Body c2 = new Body(-10, 0, 0, 0, 10);
+                Body c1 = new Body(10, 0, 0, 0, 100);
+                Body c2 = new Body(-10, 0, 0, 0, 10);
 
-            Body s = new Body(0, 0, 0, 0, 100, lbl:"Sol");
-            Body j = new Body(200, 0, s, 1, lbl:"Jool");
-            Body t = new Body(5, 0, j, 0.01, lbl:"Tylo");
-            Body l = new Body(10, 0, j, 0.05, lbl:"Vall");
-            
+                Body s = new Body(0, 0, 0, 0, 100, lbl: "Sol");
+                Body j = new Body(200, 0, s, 1, lbl: "Jool");
+                Body t = new Body(5, 0, j, 0.01, lbl: "Tylo");
+                Body l = new Body(10, 0, j, 0.05, lbl: "Vall");
 
-            //universe = new List<Body>() { center, a, b };
-            //universe = new List<Body>() { center, a };
-            //universe = new List<Body>() { c1,c2 };
-            universe = new List<Body>() { s, j, t, l};
+                //universe = new List<Body>() { center, a, b };
+                //universe = new List<Body>() { center, a };
+                //universe = new List<Body>() { c1,c2 };
+                universe = new List<Body>() { s, j, t, l};
+            }
 
             physics = new Physics(useRelative);
         }

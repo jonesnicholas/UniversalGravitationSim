@@ -10,23 +10,23 @@ namespace WindowsFormsApp1
     {
         public string name;
 
-        public Vector p;
-        public Vector v;
+        public Vector p = new Vector();
+        public Vector v = new Vector();
 
-        public Vector pNext;
-        public Vector vNext;
+        public Vector pNext = new Vector();
+        public Vector vNext = new Vector();
 
-        public double m;
-        public double rho; //avg density
-        public double r;
-        public bool pinned;
+        public double m = 0;
+        public double rho = 1; //avg density
+        public double r = 0;
+        public bool pinned = false;
         public bool deletionFlag = false;
 
         #region constructors
 
         public Body()
         {
-            //empty
+            initialize();
         }
 
         public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
