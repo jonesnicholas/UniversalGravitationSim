@@ -21,9 +21,9 @@ namespace UnitTests
             double rho = random.NextDouble();
             string name = "test";
             RelativeBody relBody = new RelativeBody(p0, mass, v0, empty, rho, name);
-            checkRoughlyEqual(p0,relBody.p);
+            Assert.IsTrue(p0 ==relBody.p);
             Assert.AreEqual(mass, relBody.m);
-            checkRoughlyEqual(v0, relBody.v);
+            Assert.IsTrue(v0 == relBody.v);
             Assert.AreEqual(empty, relBody.parent);
             Assert.AreEqual(rho, relBody.rho);
             Assert.AreEqual(name, relBody.name);
@@ -99,25 +99,7 @@ namespace UnitTests
                     totalSeparation += p0;
                     outer = new RelativeBody(p0, parentBody: outer);
                 }
-                checkRoughlyEqual(totalSeparation, outer.distanceFromParent(center));
-            }
-        }
-
-        internal void checkRoughlyEqual(Vector expected, Vector actual)
-        {
-            double scale = Math.Max(expected.mag(), actual.mag());
-            double epsilon = scale * 1E-15;
-            if (Math.Abs(expected.x - actual.x) > epsilon)
-            {
-                Assert.AreEqual(expected.x, actual.x);
-            }
-            if (Math.Abs(expected.y - actual.y) > epsilon)
-            {
-                Assert.AreEqual(expected.y, actual.y);
-            }
-            if (Math.Abs(expected.z - actual.z) > epsilon)
-            {
-                Assert.AreEqual(expected.z, actual.z);
+                Assert.IsTrue(totalSeparation == outer.distanceFromParent(center));
             }
         }
 
