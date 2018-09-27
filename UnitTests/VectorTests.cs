@@ -128,13 +128,122 @@ namespace UnitTests
             Vector B = new Vector(bx, by, bz);
             Vector C = A + B;
 
+            // Verify neither A nor B had values changed
+            Assert.AreEqual(ax, A.x);
+            Assert.AreEqual(ay, A.y);
+            Assert.AreEqual(az, A.z);
+
+            Assert.AreEqual(bx, B.x);
+            Assert.AreEqual(by, B.y);
+            Assert.AreEqual(bz, B.z);
+
+            // Verify C has correct values based on A and B
             Assert.AreEqual(ax + bx, C.x);
             Assert.AreEqual(ay + by, C.y);
             Assert.AreEqual(az + bz, C.z);
 
+            // Verify += works too
             A += B;
-
             Assert.IsTrue(A == C);
+        }
+
+        [TestMethod]
+        public void Vector_Verify_Operator_Negate()
+        {
+            double ax = random.NextDouble();
+            double ay = random.NextDouble();
+            double az = random.NextDouble();
+
+            Vector A = new Vector(ax, ay, az);
+            Vector B = -A;
+
+            // Verify value of A was not changed
+            Assert.AreEqual(ax, A.x);
+            Assert.AreEqual(ay, A.y);
+            Assert.AreEqual(az, A.z);
+
+            //Verify B has correct values
+            Assert.AreEqual(-ax, B.x);
+            Assert.AreEqual(-ay, B.y);
+            Assert.AreEqual(-az, B.z);
+        }
+
+        [TestMethod]
+        public void Vector_Verify_Operator_Minus()
+        {
+            double ax = random.NextDouble();
+            double ay = random.NextDouble();
+            double az = random.NextDouble();
+            double bx = random.NextDouble();
+            double by = random.NextDouble();
+            double bz = random.NextDouble();
+
+            Vector A = new Vector(ax, ay, az);
+            Vector B = new Vector(bx, by, bz);
+            Vector C = A - B;
+
+            // Verify neither A nor B had values changed
+            Assert.AreEqual(ax, A.x);
+            Assert.AreEqual(ay, A.y);
+            Assert.AreEqual(az, A.z);
+
+            Assert.AreEqual(bx, B.x);
+            Assert.AreEqual(by, B.y);
+            Assert.AreEqual(bz, B.z);
+            
+            // Verify C has correct values based on A and B
+            Assert.AreEqual(ax - bx, C.x);
+            Assert.AreEqual(ay - by, C.y);
+            Assert.AreEqual(az - bz, C.z);
+
+            // Verify -= works too
+            A -= B;
+            Assert.IsTrue(A == C);
+        }
+
+        [TestMethod]
+        public void Vector_Verify_Operator_Scale()
+        {
+            double ax = random.NextDouble();
+            double ay = random.NextDouble();
+            double az = random.NextDouble();
+            double scale = random.NextDouble();
+
+            Vector A = new Vector(ax, ay, az);
+            Vector Aalt = new Vector(ax, ay, az);
+            Vector B = scale * A;
+            Vector C = A * scale;
+            Vector D = A / scale;
+
+            // Verify B C and D have correct values
+            Assert.AreEqual(scale * ax, B.x);
+            Assert.AreEqual(scale * ay, B.y);
+            Assert.AreEqual(scale * az, B.z);
+
+            Assert.AreEqual(scale * ax, C.x);
+            Assert.AreEqual(scale * ay, C.y);
+            Assert.AreEqual(scale * az, C.z);
+
+            Assert.AreEqual(ax * (1.0 / scale), D.x);
+            Assert.AreEqual(ay * (1.0 / scale), D.y);
+            Assert.AreEqual(az * (1.0 / scale), D.z);
+
+            // Verify A was unchanged
+            Assert.AreEqual(ax, A.x);
+            Assert.AreEqual(ay, A.y);
+            Assert.AreEqual(az, A.z);
+
+            // Verify *= and /= work too
+            A *= scale;
+            Aalt /= scale;
+
+            Assert.AreEqual(ax * scale, A.x);
+            Assert.AreEqual(ay * scale, A.y);
+            Assert.AreEqual(az * scale, A.z);
+
+            Assert.AreEqual(ax * (1.0 / scale), Aalt.x);
+            Assert.AreEqual(ay * (1.0 / scale), Aalt.y);
+            Assert.AreEqual(az * (1.0 / scale), Aalt.z);
         }
 
         internal void checkRoughlyEqual(double expected, double actual, double zeroScale = 90)

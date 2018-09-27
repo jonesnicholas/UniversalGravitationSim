@@ -83,6 +83,18 @@ namespace WindowsFormsApp1
             return output;
         }
 
+        public static Vector operator -(Vector a)
+        {
+            Vector output = new Vector(-a.x, -a.y, -a.z);
+            return output;
+        }
+
+        public static Vector operator -(Vector a, Vector b)
+        {
+            Vector output = a + (-b);
+            return output;
+        }
+
         public static Vector operator *(Vector a, double b)
         {
             Vector output = new Vector(a.x * b, a.y * b, a.z * b);
@@ -96,7 +108,7 @@ namespace WindowsFormsApp1
 
         public static Vector operator /(Vector a, double b)
         {
-            return a * (1 / b);
+            return a * (1.0 / b);
         }
 
         public static double operator *(Vector a, Vector b)
@@ -107,18 +119,6 @@ namespace WindowsFormsApp1
         public static Vector operator /(Vector a, Vector b)
         {
             Vector output = new Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-            return output;
-        }
-
-        public static Vector operator -(Vector a)
-        {
-            Vector output = new Vector(-a.x, -a.y, -a.z);
-            return output;
-        }
-
-        public static Vector operator -(Vector a, Vector b)
-        {
-            Vector output = a + (-b);
             return output;
         }
         #endregion
