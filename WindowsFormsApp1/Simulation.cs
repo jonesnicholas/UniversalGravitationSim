@@ -83,11 +83,22 @@ namespace WindowsFormsApp1
             play = true;
             update();
             play = hold;
+            printUniverse();
         }
 
         public void render(PaintEventArgs e)
         {
             renderEngine.runRenderEngine(universe,formWindow,e);
+        }
+
+        public void printUniverse()
+        {
+            Debug.WriteLine("Universe");
+            foreach (Body body in universe)
+            {
+                Debug.WriteLine($"{body.name}: P:({body.p.x},{body.p.y}) V:({body.v.x},{body.v.y})");
+            }
+            Debug.WriteLine("========");
         }
     }
 }
