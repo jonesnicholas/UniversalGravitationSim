@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Simulation sim = new Simulation(useRel:true);
+            Simulation sim = new Simulation(useRel:false);
             FormWindow mainWindow = new FormWindow(sim);
             sim.formWindow = mainWindow;
             sim.initialize();

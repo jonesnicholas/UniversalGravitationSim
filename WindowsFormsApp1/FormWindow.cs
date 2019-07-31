@@ -94,6 +94,10 @@ namespace WindowsFormsApp1
                 simulation.simDegree++;
                 Debug.WriteLine("simDegree: " + simulation.simDegree);
             }
+            if (e.KeyChar == '.')
+            {
+                simulation.step();
+            }
         }
     }
 }

@@ -39,12 +39,12 @@ namespace WindowsFormsApp1
             }
             else
             {
-                Body center = new Body(0, 0, 0, 0, 100, 1, true);
-                Body a = new Body(200, 0, center, 1, 10);
+                //Body center = new Body(0, 0, 0, 0, 100, 1, true);
+                //Body a = new Body(200, 0, center, 1, 10);
                 //Body b = new Body(105, 0, 0, 1 + Math.Sqrt(0.2), 0.1);
 
-                Body c1 = new Body(10, 0, 0, 0, 100);
-                Body c2 = new Body(-10, 0, 0, 0, 10);
+                //Body c1 = new Body(10, 0, 0, 0, 100);
+                //Body c2 = new Body(-10, 0, 0, 0, 10);
 
                 Body s = new Body(0, 0, 0, 0, 100, lbl: "Sol");
                 Body j = new Body(200, 0, s, 1, lbl: "Jool");
@@ -64,6 +64,10 @@ namespace WindowsFormsApp1
         {
             DateTime start = DateTime.Now;
             double dt = interval*desiredTimeDilation / simDegree;
+            if (!play)
+            {
+                return;
+            }
             for (int i=0; i<simDegree; i++)
             {
                 physics.update(ref universe, dt);
@@ -71,6 +75,14 @@ namespace WindowsFormsApp1
             }
             double timeInterval = (start - DateTime.Now).TotalSeconds;
             //Debug.WriteLine(timeInterval);
+        }
+
+        public void step()
+        {
+            bool hold = play;
+            play = true;
+            update();
+            play = hold;
         }
 
         public void render(PaintEventArgs e)
