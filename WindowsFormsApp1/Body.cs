@@ -29,6 +29,17 @@ namespace WindowsFormsApp1
             initialize();
         }
 
+        public Body(double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
+        {
+            p = new Vector(0, 0, 0);
+            v = new Vector(0, 0, 0);
+            rho = rho0;
+            m = m0;
+            pinned = pin;
+            name = lbl;
+            initialize();
+        }
+
         public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
         {
             p = new Vector(px0, py0, 0);
