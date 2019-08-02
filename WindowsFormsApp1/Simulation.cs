@@ -10,7 +10,7 @@ namespace WindowsFormsApp1
 {
     public class Simulation
     {
-        public List<Body> universe;
+        public Universe universe;
         public Physics physics;
         internal RenderEngine renderEngine;
         public bool play = false;
@@ -18,46 +18,16 @@ namespace WindowsFormsApp1
         public double interval = 0.01;
         public double desiredTimeDilation = 200.0;
         public FormWindow formWindow;
-        bool useRelative;
 
-        public Simulation(RenderEngine rEng = null, bool useRel = false)
+        public Simulation(RenderEngine rEng = null)
         {
-            renderEngine = rEng ?? new RenderEngine(useRel);
-            useRelative = useRel;
+            renderEngine = rEng ?? new RenderEngine();
         }
 
-        public void initialize()
+        public void initialize(Universe uni = null, bool relative = false)
         {
-            if (useRelative)
-            {
-                RelativeBody sr = new RelativeBody(100, "Sol");
-                RelativeBody jr = new RelativeBody(200, 100, sr, 1, lbl: "Jool");
-                RelativeBody tr = new RelativeBody(20, 2, jr, 0.01, lbl: "Tylo");
-                RelativeBody ast = new RelativeBody(3, -1, tr, 0.05, lbl: "Ast");
-                
-                universe = new List<Body>() { sr, jr, tr, ast };
-            }
-            else
-            {
-                //Body center = new Body(0, 0, 0, 0, 100, 1, true);
-                //Body a = new Body(200, 0, center, 1, 10);
-                //Body b = new Body(105, 0, 0, 1 + Math.Sqrt(0.2), 0.1);
-
-                //Body c1 = new Body(10, 0, 0, 0, 100);
-                //Body c2 = new Body(-10, 0, 0, 0, 10);
-
-                Body s = new Body(100, lbl: "Sol");
-                Body j = new Body(200, 100, s, 1, lbl: "Jool");
-                Body t = new Body(20, 2, j, 0.01, lbl: "Tylo");
-                Body a = new Body(3, -1, t, 0.05, lbl: "Ast");
-
-                //universe = new List<Body>() { center, a, b };
-                //universe = new List<Body>() { center, a };
-                //universe = new List<Body>() { c1,c2 };
-                universe = new List<Body>() { s, j, t, a};
-            }
-
-            physics = new Physics(useRelative);
+            universe = uni == null ? Universe.GenerateSampleUniverse(relative) : uni;
+            physics = new Physics();
         }
 
         public void update()
@@ -95,9 +65,9 @@ namespace WindowsFormsApp1
         public void printUniverse()
         {
             Debug.WriteLine("Universe");
-            foreach (Body body in universe)
+            foreach (Body body in universe.GetBodies())
             {
-                if (useRelative)
+                if (universe.useRelative)
                 {
                     RelativeBody relBod = body as RelativeBody;
                     //Debug.WriteLine($"{relBod.name}: P:({relBod.GetAbsP().x},{relBod.GetAbsP().y}) V:({relBod.GetAbsV().x},{relBod.GetAbsV().y} A:{relBod.a})");

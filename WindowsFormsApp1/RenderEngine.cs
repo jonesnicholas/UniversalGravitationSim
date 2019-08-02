@@ -22,14 +22,12 @@ namespace WindowsFormsApp1
         internal double fps = 0;
         internal double ups = 0;
         public volatile int updateCount = 0;
-        bool useRelative;
         
-        public RenderEngine(bool useRel)
+        public RenderEngine()
         {
-            useRelative = useRel;
         }
 
-        public void runRenderEngine(List<Body> universe, Form form, PaintEventArgs e, Body newFocus = null)
+        public void runRenderEngine(Universe universe, Form form, PaintEventArgs e, Body newFocus = null)
         {
             DateTime start = DateTime.Now;
             
@@ -49,14 +47,14 @@ namespace WindowsFormsApp1
 
         #region Rendering Methods
 
-        internal void renderBodies(Graphics dc, List<Body> universe)
+        internal void renderBodies(Graphics dc, Universe universe)
         {
             if (universe == null)
             {
                 return;
             }
             Pen BodyPen = new Pen(Color.Black, 1);
-            foreach (Body body in universe)
+            foreach (Body body in universe.GetBodies())
             {
                 renderBody(dc, BodyPen, body);
             }
@@ -114,15 +112,15 @@ namespace WindowsFormsApp1
 
         #region control methods
 
-        public void focusNext(List<Body> universe)
+        public void focusNext(Universe universe)
         {
             if (focus == null)
             {
-                focus = universe.First();
+                focus = universe.GetBodies().First();
             }
-            int ind = universe.IndexOf(focus);
+            int ind = universe.GetBodies().IndexOf(focus);
             ind++;
-            focus = ind >= universe.Count ? null : universe[ind];
+            focus = ind >= universe.GetBodies().Count ? null : universe.GetBodies()[ind];
         }
 
         public void focusNull()

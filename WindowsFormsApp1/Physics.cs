@@ -10,69 +10,71 @@ namespace WindowsFormsApp1
     public class Physics
     {
         public bool parallel = false;
-        bool useRelative;
 
-        public Physics(bool useRel)
+        public Physics()
         {
-            useRelative = useRel;
+
         }
 
-        public void update(ref List<Body> universe, double dt)
+        public void update(ref Universe universe, double dt)
         {
             calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
-            if (useRelative)
+            if (universe.useRelative)
             {
-                correctForMovingReferenceFrames(universe.Select(body => (RelativeBody)body).ToList(), dt);
+                correctForMovingReferenceFrames(universe, dt);
             }
             updateBodies(universe);
-            removeFlaggedObjects(ref universe);
+            //removeFlaggedObjects(ref universe);
             //fixBarycenter(universe);
         }
 
-        internal void calcBodyTrajectory(List<Body> universe, double dt)
+        internal void calcBodyTrajectory(Universe universe, double dt)
         {
             if (parallel)
             {
-                Parallel.ForEach(universe, body =>
+                Parallel.ForEach(universe.GetBodies(), body =>
                 {
                     updateEuler(universe, body, dt);
                 });
             }
             else
             {
-                foreach (Body body in universe)
+                foreach (Body body in universe.GetBodies())
                 {
                     updateEuler(universe, body, dt);
                 }
             }
         }
 
-        internal void updateBodies(List<Body> universe)
+        internal void updateBodies(Universe universe)
         {
-            foreach (Body body in universe)
+            foreach (Body body in universe.GetBodies())
             {
                 body.update();
             }
         }
 
-        internal void removeFlaggedObjects(ref List<Body> universe)
+        internal void removeFlaggedObjects(ref Universe universe)
         {
-            universe = universe.Where(body => !body.deletionFlag).ToList();
+            //TODO: Do actual removal intelligently in the universe class
+            //universe = universe.Where(body => !body.deletionFlag).ToList();
         }
 
-        internal void checkCollision(List<Body> universe)
+        internal void checkCollision(Universe universe)
         {
-            for (int i=0; i<universe.Count(); i++)
+            //TODO: rework, verify, and find a way to intelligently spatial partition
+            List<Body> allBodies = universe.GetBodies();
+            for (int i=0; i< allBodies.Count(); i++)
             {
-                Body a = universe[i];
+                Body a = allBodies[i];
                 if (a.deletionFlag)
                 {
                     continue;
                 }
-                for (int j=i+1; j<universe.Count(); j++)
+                for (int j=i+1; j< allBodies.Count(); j++)
                 {
-                    Body b = universe[j];
+                    Body b = allBodies[j];
                     if (b.deletionFlag)
                     {
                         continue;
@@ -91,7 +93,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        internal void updateEuler(List<Body> universe, Body body, double dt)
+        internal void updateEuler(Universe universe, Body body, double dt)
         {
             Vector a = acceleration(universe, body, body.p);
             body.a = a;
@@ -99,16 +101,16 @@ namespace WindowsFormsApp1
             body.pNext = body.p + body.v * dt;
         }
 
-        internal Vector acceleration(List<Body> universe, Body body, Vector position)
+        internal Vector acceleration(Universe universe, Body body, Vector position)
         {
             Vector a = new Vector(0, 0, 0);
-            foreach (Body other in universe)
+            foreach (Body other in universe.GetBodies())
             {
                 if (other == body)
                 {
                     continue;
                 }
-                Vector dist = distance(body,other);
+                Vector dist = distance(body, other, universe.useRelative);
                 //Debug.WriteLine(dist.ToString());
                 a += other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
             }
@@ -116,14 +118,14 @@ namespace WindowsFormsApp1
             return a;
         }
 
-        internal Vector distance(Body a, Body b)
+        internal Vector distance(Body a, Body b, bool relativeMeasurements)
         {
             Vector dist = new Vector();
             if (a == b)
             {
                 return dist;
             }
-            if (useRelative)
+            if (relativeMeasurements)
             {
                 RelativeBody ra = (RelativeBody)a;
                 RelativeBody rb = (RelativeBody)b;
@@ -138,21 +140,21 @@ namespace WindowsFormsApp1
             return dist;
         }
 
-        internal void fixBarycenter(List<Body> universe)
+        internal void fixBarycenter(Universe universe)
         {
             //TODO: correct eqns for relative mode
-            foreach (Body body in universe)
+            foreach (Body body in universe.GetBodies())
             {
                 if (body.pinned)
                 {
                     return;
                 }
             }
-            if (useRelative)
+            if (universe.useRelative)
             {
                 Vector weightedP = new Vector();
                 double mass = 0;
-                Body center = universe[0]; //TODO: Fix for cases where multiple bodies have "null" as parent e.g binary stars
+                Body center = universe.GetBodies().First(); //TODO: Fix for cases where multiple bodies have "null" as parent e.g binary stars
                 Vector barycenter = (center as RelativeBody).GetFamilyBarycenter();
 
                 Debug.WriteLine($"bary: {barycenter.ToString()}");
@@ -162,24 +164,24 @@ namespace WindowsFormsApp1
             {
                 Vector weightedP = new Vector();
                 double mass = 0;
-                foreach (Body body in universe)
+                foreach (Body body in universe.GetBodies())
                 {
                     weightedP += body.m * body.p;
                     mass += body.m;
                 }
                 weightedP /= mass;
                 Debug.WriteLine($"bary: {weightedP.ToString()}");
-                foreach (Body body in universe)
+                foreach (Body body in universe.GetBodies())
                 {
                     body.p -= weightedP;
                 }
             }
         }
 
-        internal void correctForMovingReferenceFrames(List<RelativeBody> universe, double dt)
+        internal void correctForMovingReferenceFrames(Universe universe, double dt)
         {
             // need to adjust the position/velocity vectors to account for the fact that reference frames are moving and accelerating.
-            RelativeBody center = universe[0]; //TODO: rewrite to handle binary-style cases
+            RelativeBody center = (RelativeBody) universe.GetBodies().First(); //TODO: rewrite to handle binary-style cases
             center.correctForMovingReferenceFrames(dt);
         }
     }
