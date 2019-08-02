@@ -13,7 +13,11 @@ namespace WindowsFormsApp1
         public double x = 0;
         public double y = 0;
         public double z = 0;
-        
+
+        public override string ToString()
+        {
+            return $"({x}, {y}, {z})";
+        }
 
         public Vector(double x0, double y0, double z0)
         {
