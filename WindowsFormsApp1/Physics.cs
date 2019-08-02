@@ -20,14 +20,14 @@ namespace WindowsFormsApp1
         public void update(ref List<Body> universe, double dt)
         {
             calcBodyTrajectory(universe, dt);
+            //checkCollision(universe);
             if (useRelative)
             {
-                correctForMovingReferenceFrames(universe.Select(body => (RelativeBody)body).ToList());
+                correctForMovingReferenceFrames(universe.Select(body => (RelativeBody)body).ToList(), dt);
             }
-            //checkCollision(universe);
             updateBodies(universe);
             removeFlaggedObjects(ref universe);
-            fixBarycenter(universe);
+            //fixBarycenter(universe);
         }
 
         internal void calcBodyTrajectory(List<Body> universe, double dt)
@@ -94,8 +94,9 @@ namespace WindowsFormsApp1
         internal void updateEuler(List<Body> universe, Body body, double dt)
         {
             Vector a = acceleration(universe, body, body.p);
+            body.a = a;
             body.vNext = body.v + a * dt;
-            body.pNext = body.p + body.vNext * dt;
+            body.pNext = body.p + body.v * dt;
         }
 
         internal Vector acceleration(List<Body> universe, Body body, Vector position)
@@ -108,9 +109,10 @@ namespace WindowsFormsApp1
                     continue;
                 }
                 Vector dist = distance(body,other);
+                //Debug.WriteLine(dist.ToString());
                 a += other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
             }
-            //Debug.WriteLine(body.name + ": " + a.x + " " + a.y + " " + a.z);
+            //Debug.WriteLine(body.name + a.ToString());
             return a;
         }
 
@@ -138,6 +140,7 @@ namespace WindowsFormsApp1
 
         internal void fixBarycenter(List<Body> universe)
         {
+            //TODO: correct eqns for relative mode
             foreach (Body body in universe)
             {
                 if (body.pinned)
@@ -145,23 +148,39 @@ namespace WindowsFormsApp1
                     return;
                 }
             }
-            Vector weightedP = new Vector();
-            double mass = 0;
-            foreach (Body body in universe)
+            if (useRelative)
             {
-                weightedP += body.m * body.p;
-                mass += body.m;
+                Vector weightedP = new Vector();
+                double mass = 0;
+                Body center = universe[0]; //TODO: Fix for cases where multiple bodies have "null" as parent e.g binary stars
+                Vector barycenter = (center as RelativeBody).GetFamilyBarycenter();
+
+                Debug.WriteLine($"bary: {barycenter.ToString()}");
+                center.p -= barycenter;
             }
-            weightedP /= mass;
-            foreach (Body body in universe)
+            else
             {
-                body.p -= weightedP;
+                Vector weightedP = new Vector();
+                double mass = 0;
+                foreach (Body body in universe)
+                {
+                    weightedP += body.m * body.p;
+                    mass += body.m;
+                }
+                weightedP /= mass;
+                Debug.WriteLine($"bary: {weightedP.ToString()}");
+                foreach (Body body in universe)
+                {
+                    body.p -= weightedP;
+                }
             }
         }
 
-        internal void correctForMovingReferenceFrames(List<RelativeBody> universe)
+        internal void correctForMovingReferenceFrames(List<RelativeBody> universe, double dt)
         {
-
+            // need to adjust the position/velocity vectors to account for the fact that reference frames are moving and accelerating.
+            RelativeBody center = universe[0]; //TODO: rewrite to handle binary-style cases
+            center.correctForMovingReferenceFrames(dt);
         }
     }
 }
