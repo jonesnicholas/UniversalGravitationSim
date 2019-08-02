@@ -9,6 +9,7 @@ namespace WindowsFormsApp1
     public class RelativeBody : Body
     {
         public RelativeBody parent;
+        public List<RelativeBody> children;
 
         #region constructors
 
@@ -37,7 +38,6 @@ namespace WindowsFormsApp1
         {
             Vector inP = new Vector(x0, y0, 0.0);
             parent = parentBody;
-            pinned = parent == null;
             p = inP;
             v = parent == null ? new Vector() : inV;
             if (v == null)
@@ -61,7 +61,6 @@ namespace WindowsFormsApp1
             string lbl = "<>")
         {
             parent = parentBody;
-            pinned = parent == null;
             p = inP;
             v = parent == null ? new Vector() : inV;
             if (v == null)
@@ -76,6 +75,44 @@ namespace WindowsFormsApp1
             initialize();
         }
         #endregion  
+
+        public override void initialize()
+        {
+            base.initialize();
+            //pinned = parent == null; //TODO: Work-around this, need soln for binary objects
+            children = new List<RelativeBody>();
+            if (this.parent != null)
+            {
+                parent.AdoptChild(this);
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{name}: {p.ToString()} {v.ToString()}";
+        }
+
+        private void AdoptChild(RelativeBody child)
+        {
+            if (!children.Contains(child))
+            {
+                if (child.parent != null && child.parent != this)
+                {
+                    child.parent.AbandonChild(child);
+                    child.parent = this;
+                }
+                children.Add(child);
+            }
+        }
+
+        private void AbandonChild(RelativeBody child)
+        {
+            if (children.Contains(child))
+            {
+                children.Remove(child);
+                child.parent = null;
+            }
+        }
 
         public int parentDepth()
         {
@@ -123,6 +160,62 @@ namespace WindowsFormsApp1
                 par = par.parent;
             }
             return relDis;
+        }
+
+        public double GetFamilyMass()
+        {
+            double mass = this.m;
+            foreach(RelativeBody child in children)
+            {
+                mass += child.GetFamilyMass();
+            }
+            return mass;
+        }
+
+        public Vector GetFamilyBarycenter()
+        {
+            double mass = this.m;
+            Vector Bary = new Vector();
+            foreach(RelativeBody child in children)
+            {
+                Vector subBary = child.GetFamilyBarycenter() + child.p;
+                double subm = child.GetFamilyMass();
+
+                Bary += subm * subBary;
+                mass += subm;
+            }
+            Bary /= mass;
+            return Bary;
+        }
+
+        public Vector GetAbsP()
+        {
+            if (this.parent == null)
+            {
+                return this.p;
+            }
+            return this.p + parent.GetAbsP();
+        }
+
+        public Vector GetAbsV()
+        {
+            if (this.parent == null)
+            {
+                return this.v;
+            }
+            return this.v + parent.GetAbsV();
+        }
+
+        public void correctForMovingReferenceFrames(double dt)
+        {
+            if (parent != null)
+            {
+                vNext -= dt * parent.a;
+            }
+            foreach (RelativeBody child in children)
+            {
+                child.correctForMovingReferenceFrames(dt);
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace WindowsFormsApp1
 
         public Vector p = new Vector();
         public Vector v = new Vector();
+        public Vector a = new Vector();
 
         public Vector pNext = new Vector();
         public Vector vNext = new Vector();
@@ -98,7 +99,7 @@ namespace WindowsFormsApp1
             v = vNext;
         }
 
-        public void initialize()
+        public virtual void initialize()
         {
             estR();
         }
