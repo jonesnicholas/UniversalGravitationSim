@@ -51,6 +51,7 @@
     <Compile Include="PhysicsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelativeBodyTests.cs" />
+    <Compile Include="ScenarioTests.cs" />
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>

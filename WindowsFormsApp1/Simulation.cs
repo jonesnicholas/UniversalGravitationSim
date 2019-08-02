@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
         public bool play = false;
         public double simDegree = 100.0;
         public double interval = 0.01;
-        public double desiredTimeDilation = 100.0;
+        public double desiredTimeDilation = 200.0;
         public FormWindow formWindow;
         bool useRelative;
 
@@ -31,11 +31,11 @@ namespace WindowsFormsApp1
             if (useRelative)
             {
                 RelativeBody sr = new RelativeBody(100, "Sol");
-                RelativeBody jr = new RelativeBody(200, 0, sr, 1, lbl: "Jool");
-                RelativeBody tr = new RelativeBody(5, 0, jr, 0.01, lbl: "Tylo");
-                RelativeBody lr = new RelativeBody(10, 0, jr, 0.05, lbl: "Vall");
+                RelativeBody jr = new RelativeBody(200, 100, sr, 1, lbl: "Jool");
+                RelativeBody tr = new RelativeBody(20, 2, jr, 0.01, lbl: "Tylo");
+                RelativeBody ast = new RelativeBody(3, -1, tr, 0.05, lbl: "Ast");
                 
-                universe = new List<Body>() { sr, jr, tr, lr };
+                universe = new List<Body>() { sr, jr, tr, ast };
             }
             else
             {
@@ -47,14 +47,14 @@ namespace WindowsFormsApp1
                 //Body c2 = new Body(-10, 0, 0, 0, 10);
 
                 Body s = new Body(100, lbl: "Sol");
-                Body j = new Body(200, 0, s, 1, lbl: "Jool");
-                Body t = new Body(5, 0, j, 0.01, lbl: "Tylo");
-                Body l = new Body(10, 0, j, 0.05, lbl: "Vall");
+                Body j = new Body(200, 100, s, 1, lbl: "Jool");
+                Body t = new Body(20, 2, j, 0.01, lbl: "Tylo");
+                Body a = new Body(3, -1, t, 0.05, lbl: "Ast");
 
                 //universe = new List<Body>() { center, a, b };
                 //universe = new List<Body>() { center, a };
                 //universe = new List<Body>() { c1,c2 };
-                universe = new List<Body>() { s, j, t, l};
+                universe = new List<Body>() { s, j, t, a};
             }
 
             physics = new Physics(useRelative);
@@ -79,6 +79,7 @@ namespace WindowsFormsApp1
 
         public void step()
         {
+            printUniverse();
             bool hold = play;
             play = true;
             update();
@@ -96,7 +97,16 @@ namespace WindowsFormsApp1
             Debug.WriteLine("Universe");
             foreach (Body body in universe)
             {
-                Debug.WriteLine($"{body.name}: P:({body.p.x},{body.p.y}) V:({body.v.x},{body.v.y})");
+                if (useRelative)
+                {
+                    RelativeBody relBod = body as RelativeBody;
+                    //Debug.WriteLine($"{relBod.name}: P:({relBod.GetAbsP().x},{relBod.GetAbsP().y}) V:({relBod.GetAbsV().x},{relBod.GetAbsV().y} A:{relBod.a})");
+                    Debug.WriteLine($"{relBod.name}: P:({relBod.GetAbsP().x},{relBod.GetAbsP().y}) V:({relBod.GetAbsV().x},{relBod.GetAbsV().y})");
+                }
+                else
+                {
+                    Debug.WriteLine($"{body.name}: P:({body.p.x},{body.p.y}) V:({body.v.x},{body.v.y})");
+                }
             }
             Debug.WriteLine("========");
         }
