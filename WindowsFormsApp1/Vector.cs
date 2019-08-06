@@ -14,6 +14,8 @@ namespace WindowsFormsApp1
         public double y = 0;
         public double z = 0;
 
+        public static Vector zeroVect = new Vector();
+
         public override string ToString()
         {
             return $"({x}, {y}, {z})";
