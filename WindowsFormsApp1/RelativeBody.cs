@@ -87,11 +87,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        public override string ToString()
-        {
-            return $"{name}: {p.ToString()} {v.ToString()}";
-        }
-
         private void AdoptChild(RelativeBody child)
         {
             if (!children.Contains(child))

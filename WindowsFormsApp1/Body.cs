@@ -108,5 +108,10 @@ namespace WindowsFormsApp1
         {
             r = Math.Pow(m / rho * 3.0 / 4.0 / Math.PI, 1.0 / 3.0);
         }
+
+        public override string ToString()
+        {
+            return $"{name}: {p.ToString()} {v.ToString()}";
+        }
     }
 }
