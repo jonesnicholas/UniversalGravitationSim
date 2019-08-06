@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
             }
             updateBodies(universe);
             //removeFlaggedObjects(ref universe);
-            //fixBarycenter(universe);
+            fixBarycenter(universe);
         }
 
         internal void calcBodyTrajectory(Universe universe, double dt)
@@ -157,8 +157,8 @@ namespace WindowsFormsApp1
                 Body center = universe.GetBodies().First(); //TODO: Fix for cases where multiple bodies have "null" as parent e.g binary stars
                 Vector barycenter = (center as RelativeBody).GetFamilyBarycenter();
 
-                Debug.WriteLine($"bary: {barycenter.ToString()}");
-                center.p -= barycenter;
+                //Debug.WriteLine($"bary: {barycenter.ToString()}");
+                center.p = -barycenter;
             }
             else
             {
@@ -170,7 +170,7 @@ namespace WindowsFormsApp1
                     mass += body.m;
                 }
                 weightedP /= mass;
-                Debug.WriteLine($"bary: {weightedP.ToString()}");
+                //Debug.WriteLine($"bary: {weightedP.ToString()}");
                 foreach (Body body in universe.GetBodies())
                 {
                     body.p -= weightedP;
