@@ -54,9 +54,16 @@ namespace WindowsFormsApp1
                 return;
             }
             Pen BodyPen = new Pen(Color.Black, 1);
-            foreach (Body body in universe.GetBodies())
+            if (universe.useRelative)
             {
-                renderBody(dc, BodyPen, body);
+                RenderUniverseFromFocus(dc, BodyPen, universe, focus as RelativeBody);
+            }
+            else
+            {
+                foreach (Body body in universe.GetBodies())
+                {
+                    renderBody(dc, BodyPen, body);
+                }
             }
         }
 
@@ -81,13 +88,49 @@ namespace WindowsFormsApp1
             dc.DrawString(ups.ToString(), drawFont, drawBrush, x, y + 12, drawFormat);
         }
 
-        internal void renderBody(Graphics dc, Pen pen, Body body)
+        internal void renderBody(Graphics dc, Pen pen, Body body, Vector pOffset = null)
         {
-            Vector pOffset = (focus != null ? body.p - focus.p : body.p);
+            pOffset = pOffset == null ? (focus != null ? body.p - focus.p : body.p) : pOffset;
             Vector windowPosition = pOffset * scale + baseWindowOffset;
             //renderCircle(dc, pen, windowPosition, Math.Max(Math.Pow(body.m, 1.0 / 3.0), 0.25) * scale);
             renderCircle(dc, pen, windowPosition, body.r * scale);
             //renderBodyInfoBox(dc, body, windowPosition);
+        }
+
+        internal void RenderUniverseFromFocus(Graphics dc, Pen pen, Universe universe, RelativeBody focus)
+        {
+            RelativeBody center = (RelativeBody)universe.GetBodies().First(); // TODO: better handle binary-type cases
+            if (focus == null && center != null)
+            {
+                RecursiveRenderChildren(dc, pen, center, center.p);
+            }
+            else
+            {
+                RecursiveRenderChildren(dc, pen, focus, Vector.zeroVect);
+                RecursiveRenderParents(dc, pen, focus, Vector.zeroVect);
+            }
+        }
+
+        internal void RecursiveRenderParents(Graphics dc, Pen pen, RelativeBody body, Vector pOffset)
+        {
+            RelativeBody parent = body.parent;
+            if (parent != null)
+            {
+                RecursiveRenderChildren(dc, pen, parent, pOffset - body.p, body);
+                RecursiveRenderParents(dc, pen, parent, pOffset - body.p);
+            }
+        }
+
+        internal void RecursiveRenderChildren(Graphics dc, Pen pen, RelativeBody body, Vector pOffset, RelativeBody skip = null)
+        {
+            renderBody(dc, pen, body, pOffset);
+            foreach (RelativeBody child in body.children)
+            {
+                if (child != skip)
+                {
+                    RecursiveRenderChildren(dc, pen, child, pOffset + child.p);
+                }
+            }
         }
 
         internal void renderBodyInfoBox(Graphics dc, Body body, Vector Position)
@@ -121,6 +164,7 @@ namespace WindowsFormsApp1
             int ind = universe.GetBodies().IndexOf(focus);
             ind++;
             focus = ind >= universe.GetBodies().Count ? null : universe.GetBodies()[ind];
+            Debug.WriteLine($"New Focus: {(focus == null ? "Barycenter" : focus.ToString())}");
         }
 
         public void focusNull()

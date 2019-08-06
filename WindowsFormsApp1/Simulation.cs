@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
         public bool play = false;
         public double simDegree = 100.0;
         public double interval = 0.01;
-        public double desiredTimeDilation = 200.0;
+        public double desiredTimeDilation = 20.0;
         public FormWindow formWindow;
 
         public Simulation(RenderEngine rEng = null)

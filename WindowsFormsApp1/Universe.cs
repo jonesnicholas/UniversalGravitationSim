@@ -43,8 +43,8 @@ namespace WindowsFormsApp1
             {
                 RelativeBody sr = new RelativeBody(100, "Sol");
                 RelativeBody jr = new RelativeBody(200, 100, sr, 1, lbl: "Jool");
-                RelativeBody tr = new RelativeBody(20, 2, jr, 0.01, lbl: "Tylo");
-                RelativeBody ast = new RelativeBody(3, -1, tr, 0.05, lbl: "Ast");
+                RelativeBody tr = new RelativeBody(10, 2, jr, 0.1, lbl: "Tylo");
+                RelativeBody ast = new RelativeBody(1, -1, tr, 0.05, lbl: "Ast");
 
                 universe.AddBody(sr);
                 universe.AddBody(jr);
@@ -55,8 +55,8 @@ namespace WindowsFormsApp1
             {
                 Body s = new Body(100, lbl: "Sol");
                 Body j = new Body(200, 100, s, 1, lbl: "Jool");
-                Body t = new Body(20, 2, j, 0.01, lbl: "Tylo");
-                Body a = new Body(3, -1, t, 0.05, lbl: "Ast");
+                Body t = new Body(10, 2, j, 0.1, lbl: "Tylo");
+                Body a = new Body(1, -1, t, 0.05, lbl: "Ast");
 
                 universe.AddBody(s);
                 universe.AddBody(j);
