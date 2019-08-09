@@ -153,7 +153,6 @@ namespace WindowsFormsApp1
             if (universe.useRelative)
             {
                 Vector weightedP = new Vector();
-                double mass = 0;
                 Body center = universe.GetBodies().First(); //TODO: Fix for cases where multiple bodies have "null" as parent e.g binary stars
                 Vector barycenter = (center as RelativeBody).GetFamilyBarycenter();
 

@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
             int count = 20,
             int nestFactor = 2,
             double mScale = 100.0,
-            double mRatio = 50.0,
+            double mRatio = 1000.0,
             double dScale = 500.0)
         {
             Random random = seed == 0 ? new Random() : new Random(seed);
@@ -107,7 +107,7 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        mag = host.p.mag() * Math.Pow(host.m / (3 * host.parent.m), 0.333);
+                        mag = host.p.mag() * Math.Pow(host.m / (3 * host.parent.m), 0.333) / 4.0;
                     }
                     mag *= random.NextDouble();
                     double theta = random.NextDouble() * Math.PI * 2;

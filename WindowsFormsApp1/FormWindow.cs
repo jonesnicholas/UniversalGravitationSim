@@ -35,7 +35,7 @@ namespace WindowsFormsApp1
 
         void frame_Timer_Tick(object sender, EventArgs e)
         {
-            //this.Invalidate();
+            this.Invalidate();
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace WindowsFormsApp1
             while (IsApplicationIdle())
             {
                 simulation.update();
-                this.Invalidate();
+                //this.Invalidate();
             }
         }
 
@@ -86,12 +86,12 @@ namespace WindowsFormsApp1
             }
             if (e.KeyChar == '-')
             {
-                simulation.simDegree = simulation.simDegree == 1 ? 1 : simulation.simDegree - 1;
+                simulation.simDegree = simulation.simDegree == 1 ? 1 : simulation.simDegree /= 2.0;
                 Debug.WriteLine("simDegree: " + simulation.simDegree);
             }
             if (e.KeyChar == '+')
             {
-                simulation.simDegree++;
+                simulation.simDegree*= 2.0;
                 Debug.WriteLine("simDegree: " + simulation.simDegree);
             }
             if (e.KeyChar == '.')
