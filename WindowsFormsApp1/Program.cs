@@ -20,7 +20,9 @@ namespace WindowsFormsApp1
             Simulation sim = new Simulation();
             FormWindow mainWindow = new FormWindow(sim);
             sim.formWindow = mainWindow;
-            sim.initialize(relative: true);
+            Universe test = Universe.GenPseudoRandomUniverse(seed: 1);
+            sim.initialize(test);
+            //sim.initialize(relative: true);
             mainWindow.Size = new Size(400, 300);
             Application.Run(mainWindow);
         }

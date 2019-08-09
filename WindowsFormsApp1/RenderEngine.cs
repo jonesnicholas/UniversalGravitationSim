@@ -100,13 +100,15 @@ namespace WindowsFormsApp1
         internal void RenderUniverseFromFocus(Graphics dc, Pen pen, Universe universe, RelativeBody focus)
         {
             RelativeBody center = (RelativeBody)universe.GetBodies().First(); // TODO: better handle binary-type cases
+            Pen childPen = new Pen(Color.Blue, 1);
+
             if (focus == null && center != null)
             {
-                RecursiveRenderChildren(dc, pen, center, center.p);
+                RecursiveRenderChildren(dc, childPen, center, center.p);
             }
             else
             {
-                RecursiveRenderChildren(dc, pen, focus, Vector.zeroVect);
+                RecursiveRenderChildren(dc, childPen, focus, Vector.zeroVect);
                 RecursiveRenderParents(dc, pen, focus, Vector.zeroVect);
             }
         }

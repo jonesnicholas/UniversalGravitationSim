@@ -66,5 +66,74 @@ namespace WindowsFormsApp1
 
             return universe;
         }
+
+        public static Universe GenPseudoRandomUniverse(
+            bool relative = true,
+            int seed = 0,
+            int count = 20,
+            int nestFactor = 2,
+            double mScale = 100.0,
+            double mRatio = 50.0,
+            double dScale = 500.0)
+        {
+            Random random = seed == 0 ? new Random() : new Random(seed);
+            Universe uni = new Universe(relative);
+            double avgSplitFactor = Math.Log(count, nestFactor);
+            int total = 1;
+            if (relative)
+            {
+                RelativeBody center = new RelativeBody(mScale, "0_*");
+                uni.AddBody(center);
+                int continues = 0;
+                while (total < count)
+                {
+                    RelativeBody host = (RelativeBody)uni.GetBodies()[random.Next(0, uni.GetBodies().Count())];
+                    if (host.parentDepth() > nestFactor - 1 )
+                    {
+                        continues++;
+                        if (continues < 4)
+                        {
+                            continue;
+                        }
+                        host = center;
+                    }
+                    continues = 0;
+                    double mass = (host.m / mRatio) * Math.Pow(2, -host.children.Count());
+                    //double mag = random.NextDouble() * dScale * host.m / mScale;
+                    double mag;
+                    if (host == center)
+                    {
+                        mag = dScale;
+                    }
+                    else
+                    {
+                        mag = host.p.mag() * Math.Pow(host.m / (3 * host.parent.m), 0.333);
+                    }
+                    mag *= random.NextDouble();
+                    double theta = random.NextDouble() * Math.PI * 2;
+                    Vector distance = new Vector(mag * Math.Cos(theta), mag * Math.Sin(theta), 0);
+
+                    string name;
+                    if (host == center)
+                    {
+                        name = $"{center.children.Count() + 1}_*";
+                    }
+                    else if (host.parentDepth() == 1)
+                    {
+                        name = $"{host.name.Substring(0, host.name.Length-1)}{host.children.Count() + 1}";
+                    }
+                    else
+                    {
+                        name = $"{host.name}_{host.children.Count() + 1}";
+                    }
+
+                    RelativeBody addition = new RelativeBody(distance, host, mass, lbl: $"{name}");
+                    uni.AddBody(addition);
+                    total++;
+                }
+            }
+
+            return uni;
+        }
     }
 }
