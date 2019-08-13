@@ -47,17 +47,19 @@ namespace UnitTests
 
             for (int i = 0; i < relBodies.Count; i++)
             {
+                if (relBodies[i].a != nonrelBodies[i].a)
+                {
+                    Assert.Fail($"Non-matching accelerations {relBodies[i].a} {nonrelBodies[i].a}");
+                }
                 if (relBodies[i].GetAbsP() != nonrelBodies[i].p)
                 {
                     Assert.Fail($"Non-matching positions {relBodies[i].GetAbsP()} {nonrelBodies[i].p}");
                 }
                 if (relBodies[i].GetAbsV() != nonrelBodies[i].v)
                 {
+                    simNotRel.universe.PrintUniverse();
+                    simRel.universe.PrintUniverse();
                     Assert.Fail($"Non-matching velocities {relBodies[i].GetAbsV()} {nonrelBodies[i].v}");
-                }
-                if (relBodies[i].a != nonrelBodies[i].a)
-                {
-                    Assert.Fail($"Non-matching accelerations {relBodies[i].a} {nonrelBodies[i].a}");
                 }
             }
         }

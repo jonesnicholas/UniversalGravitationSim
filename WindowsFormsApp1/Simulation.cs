@@ -49,36 +49,17 @@ namespace WindowsFormsApp1
 
         public void step()
         {
-            printUniverse();
+            //universe.PrintUniverse();
             bool hold = play;
             play = true;
             update();
             play = hold;
-            printUniverse();
+            //universe.PrintUniverse();
         }
 
         public void render(PaintEventArgs e)
         {
             renderEngine.runRenderEngine(universe,formWindow,e);
-        }
-
-        public void printUniverse()
-        {
-            Debug.WriteLine("Universe");
-            foreach (Body body in universe.GetBodies())
-            {
-                if (universe.useRelative)
-                {
-                    RelativeBody relBod = body as RelativeBody;
-                    //Debug.WriteLine($"{relBod.name}: P:({relBod.GetAbsP().x},{relBod.GetAbsP().y}) V:({relBod.GetAbsV().x},{relBod.GetAbsV().y} A:{relBod.a})");
-                    Debug.WriteLine($"{relBod.name}: P:({relBod.GetAbsP().x},{relBod.GetAbsP().y}) V:({relBod.GetAbsV().x},{relBod.GetAbsV().y})");
-                }
-                else
-                {
-                    Debug.WriteLine($"{body.name}: P:({body.p.x},{body.p.y}) V:({body.v.x},{body.v.y})");
-                }
-            }
-            Debug.WriteLine("========");
         }
     }
 }

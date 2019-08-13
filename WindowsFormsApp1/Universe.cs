@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -132,8 +133,50 @@ namespace WindowsFormsApp1
                     total++;
                 }
             }
-
+            uni.HeirarchicalSort();
             return uni;
+        }
+
+        public void HeirarchicalSort()
+        {
+            if (!useRelative)
+            {
+                return;
+            }
+            RelativeBody center = (RelativeBody) bodies.First();
+            List<Body> sorted = new List<Body>();
+            RecursiveAdd(center, sorted);
+            bodies = sorted;
+        }
+
+        public void RecursiveAdd(RelativeBody body, List<Body> list)
+        {
+            list.Add(body);
+            body.children = body.children.OrderBy(child => child.p.mag()).ToList();
+            foreach(RelativeBody child in body.children)
+            {
+                RecursiveAdd(child, list);
+            }
+        }
+
+        public void PrintUniverse()
+        {
+            Debug.WriteLine("Universe");
+            if (useRelative)
+            {
+                foreach(RelativeBody body in bodies)
+                {
+                    Debug.WriteLine($"{body.name}: {body.a} {body.GetAbsV()} {body.GetAbsP()}");
+                }
+            }
+            else
+            {
+                foreach (Body body in bodies)
+                {
+                    Debug.WriteLine($"{body.name}: {body.a} {body.v} {body.p}");
+                }
+            }
+            Debug.WriteLine("============");
         }
     }
 }

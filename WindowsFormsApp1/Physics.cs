@@ -20,10 +20,6 @@ namespace WindowsFormsApp1
         {
             calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
-            if (universe.useRelative)
-            {
-                correctForMovingReferenceFrames(universe, dt);
-            }
             updateBodies(universe);
             //removeFlaggedObjects(ref universe);
             fixBarycenter(universe);
@@ -40,9 +36,24 @@ namespace WindowsFormsApp1
             }
             else
             {
-                foreach (Body body in universe.GetBodies())
+                if (universe.useRelative)
                 {
-                    updateEuler(universe, body, dt);
+                    foreach (Body body in universe.GetBodies())
+                    {
+                        updateEulerV(universe, body, dt);
+                    }
+                    correctForMovingReferenceFrames(universe, dt);
+                    foreach (Body body in universe.GetBodies())
+                    {
+                        updateEulerP(universe, body, dt);
+                    }
+                }
+                else
+                {
+                    foreach (Body body in universe.GetBodies())
+                    {
+                        updateEuler(universe, body, dt);
+                    }
                 }
             }
         }
@@ -93,12 +104,24 @@ namespace WindowsFormsApp1
             }
         }
 
+        internal void updateEulerV(Universe universe, Body body, double dt)
+        {
+            Vector a = acceleration(universe, body, body.p);
+            body.a = a;
+            body.vNext = body.v + a * dt;
+        }
+
+        internal void updateEulerP(Universe universe, Body body, double dt)
+        {
+            body.pNext = body.p + body.vNext * dt;
+        }
+
         internal void updateEuler(Universe universe, Body body, double dt)
         {
             Vector a = acceleration(universe, body, body.p);
             body.a = a;
             body.vNext = body.v + a * dt;
-            body.pNext = body.p + body.v * dt;
+            body.pNext = body.p + body.vNext * dt;
         }
 
         internal Vector acceleration(Universe universe, Body body, Vector position)
