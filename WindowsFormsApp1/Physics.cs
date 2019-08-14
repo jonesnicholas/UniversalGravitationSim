@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 
         public Physics()
         {
-
+            
         }
 
         public void update(ref Universe universe, double dt)
@@ -135,7 +135,7 @@ namespace WindowsFormsApp1
                 }
                 Vector dist = distance(body, other, universe.useRelative);
                 //Debug.WriteLine(dist.ToString());
-                a += other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
+                a += universe.G * other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
             }
             //Debug.WriteLine(body.name + a.ToString());
             return a;

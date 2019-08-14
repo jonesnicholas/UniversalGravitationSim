@@ -59,6 +59,7 @@
     <Compile Include="RenderEngine.cs" />
     <Compile Include="Simulation.cs" />
     <Compile Include="Universe.cs" />
+    <Compile Include="UniverseGenerator.cs" />
     <Compile Include="Vector.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
