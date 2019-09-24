@@ -28,6 +28,7 @@ namespace WindowsFormsApp1
         {
             universe = uni == null ? UniverseGenerator.GenerateTestUniverse(relative) : uni;
             physics = new Physics();
+            renderEngine.BaseScaleForUniverse(formWindow, universe);
         }
 
         public void update()

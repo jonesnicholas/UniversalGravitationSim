@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 
     public class RenderEngine
     {
-        public double scale = 4.0;
+        public double scale = 1.0;//1.164e-10;//4.0;
         public Body focus = null;
         internal Vector baseWindowOffset;
         DateTime lastFrame = DateTime.Now;
@@ -25,6 +25,29 @@ namespace WindowsFormsApp1
         
         public RenderEngine()
         {
+        }
+
+        public void BaseScaleForUniverse(Form form, Universe universe, double correction = 1.0)
+        {
+            double maxD = 0;
+            if (universe.useRelative)
+            {
+                foreach(RelativeBody body in universe.GetBodies())
+                {
+                    double bodyD = body.GetAbsP().mag();
+                    maxD = bodyD > maxD ? bodyD : maxD;
+                }
+            }
+            else
+            {
+                foreach (RelativeBody body in universe.GetBodies())
+                {
+                    double bodyD = body.p.mag();
+                    maxD = bodyD > maxD ? bodyD : maxD;
+                }
+            }
+            double smallerSide = Math.Min(form.ClientRectangle.Width / 2.0, form.ClientRectangle.Height / 2.0);
+            scale = smallerSide / maxD / correction;
         }
 
         public void runRenderEngine(Universe universe, Form form, PaintEventArgs e, Body newFocus = null)
@@ -92,6 +115,11 @@ namespace WindowsFormsApp1
         {
             pOffset = pOffset == null ? (focus != null ? body.p - focus.p : body.p) : pOffset;
             Vector windowPosition = pOffset * scale + baseWindowOffset;
+            if (windowPosition.mag() > baseWindowOffset.mag() * 3)
+            {
+                //do not render things well outside of window
+                return;
+            }
             //renderCircle(dc, pen, windowPosition, Math.Max(Math.Pow(body.m, 1.0 / 3.0), 0.25) * scale);
             renderCircle(dc, pen, windowPosition, body.r * scale);
             //renderBodyInfoBox(dc, body, windowPosition);
@@ -177,6 +205,7 @@ namespace WindowsFormsApp1
         public void scroll(double delta)
         {
             scale *= Math.Pow(2, delta / 120);
+            //Debug.WriteLine(scale);
         }
 
         #endregion

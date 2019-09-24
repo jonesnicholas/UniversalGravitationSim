@@ -19,11 +19,14 @@ namespace WindowsFormsApp1
             Application.SetCompatibleTextRenderingDefault(false);
             Simulation sim = new Simulation();
             FormWindow mainWindow = new FormWindow(sim);
-            sim.formWindow = mainWindow;
-            Universe test = Universe.GenPseudoRandomUniverse(seed: 1);
-            sim.initialize(test);
-            //sim.initialize(relative: true);
             mainWindow.Size = new Size(400, 300);
+            sim.formWindow = mainWindow;
+            //Universe test = UniverseGenerator.GenPseudoRandomUniverse(seed: 1);
+            Universe rss = UniverseGenerator.PseudoRealSolarSystem(true);
+            sim.initialize(rss);
+            //sim.initialize(relative: true);
+            //Universe small = UniverseGenerator.GenerateTwoBody(true);
+            //sim.initialize(small);
             Application.Run(mainWindow);
         }
     }
