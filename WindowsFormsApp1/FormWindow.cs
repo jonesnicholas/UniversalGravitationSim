@@ -94,9 +94,17 @@ namespace WindowsFormsApp1
                 simulation.simDegree*= 2.0;
                 Debug.WriteLine("simDegree: " + simulation.simDegree);
             }
-            if (e.KeyChar == '.')
+            if (e.KeyChar == '/')
             {
                 simulation.step();
+            }
+            if (e.KeyChar == '.')
+            {
+                simulation.desiredTimeDilation *= 2.0;
+            }
+            if (e.KeyChar == ',')
+            {
+                simulation.desiredTimeDilation /= 2.0;
             }
         }
     }

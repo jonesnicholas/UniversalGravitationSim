@@ -21,6 +21,8 @@ namespace WindowsFormsApp1
         const short smoothFactor = 30;
         internal double fps = 0;
         internal double ups = 0;
+        internal float staty = 10.0F;
+        internal const float statyDY = 12;
         public volatile int updateCount = 0;
         
         public RenderEngine()
@@ -50,7 +52,7 @@ namespace WindowsFormsApp1
             scale = smallerSide / maxD / correction;
         }
 
-        public void runRenderEngine(Universe universe, Form form, PaintEventArgs e, Body newFocus = null)
+        public void runRenderEngine(Simulation simulation, Form form, PaintEventArgs e, Body newFocus = null)
         {
             DateTime start = DateTime.Now;
             
@@ -61,9 +63,10 @@ namespace WindowsFormsApp1
             Pen RedPen = new Pen(Color.Red, 1);
             dc.DrawRectangle(RedPen, 10, 10, form.ClientRectangle.Width - 20, form.ClientRectangle.Size.Height - 20);
 
-            renderBodies(dc, universe);
+            renderBodies(dc, simulation.universe);
 
-            renderPerformanceStats(dc);
+            staty = 10.0F;
+            renderPerformanceStats(simulation, dc);
             
             //Debug.WriteLine(((DateTime.Now)-start).TotalMilliseconds);
         }
@@ -90,7 +93,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        internal void renderPerformanceStats(Graphics dc)
+        internal void renderPerformanceStats(Simulation simulation, Graphics dc)
         {
             fpsSmooth++;
             if (fpsSmooth == smoothFactor)
@@ -102,13 +105,25 @@ namespace WindowsFormsApp1
                 ups = Math.Round(updateCount / seconds, 1);
                 updateCount = 0;
             }
+
+            renderStatString($"FPS: {fps}", dc);
+            renderStatString($"UPS: {ups}", dc);
+            renderStatString($"Interval: {simulation.interval}", dc);
+            renderStatString($"Dilation: {simulation.desiredTimeDilation}", dc);
+            renderStatString($"SimDegree: {simulation.simDegree}", dc);
+            renderStatString($"dtUpdate: {simulation.interval * simulation.desiredTimeDilation / simulation.simDegree}", dc);
+            renderStatString($"dtFrame: {simulation.interval * simulation.desiredTimeDilation}", dc);
+            renderStatString($"dtSecond: {simulation.interval * simulation.desiredTimeDilation * fps}", dc);
+        }
+
+        internal void renderStatString(String str, Graphics dc)
+        {
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(System.Drawing.Color.Black);
-            float x = 10.0F;
-            float y = 10.0F;
+
             StringFormat drawFormat = new StringFormat();
-            dc.DrawString(fps.ToString(), drawFont, drawBrush, x, y, drawFormat);
-            dc.DrawString(ups.ToString(), drawFont, drawBrush, x, y + 12, drawFormat);
+            dc.DrawString(str, drawFont, drawBrush, 10.0F, staty, drawFormat);
+            staty += statyDY;
         }
 
         internal void renderBody(Graphics dc, Pen pen, Body body, Vector pOffset = null)

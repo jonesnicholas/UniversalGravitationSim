@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
 
         public void render(PaintEventArgs e)
         {
-            renderEngine.runRenderEngine(universe,formWindow,e);
+            renderEngine.runRenderEngine(this, formWindow,e);
         }
     }
 }
