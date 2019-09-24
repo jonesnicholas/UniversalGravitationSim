@@ -114,7 +114,7 @@ namespace WindowsFormsApp1
             renderStatString("SimDegree", simulation.simDegree, 0, dc);
             renderStatString("dtUpdate", simulation.interval * simulation.desiredTimeDilation / simulation.simDegree, 2, dc);
             renderStatString("dtFrame", simulation.interval * simulation.desiredTimeDilation, 2, dc);
-            renderStatString("dtSecond", simulation.interval * simulation.desiredTimeDilation * fps, 2, dc);
+            renderStatString("dtSecond", simulation.interval * simulation.desiredTimeDilation * fps * (simulation.play ? 1 : 0), 2, dc);
         }
 
         internal void renderStatString(String str, double stat, int round, Graphics dc)
