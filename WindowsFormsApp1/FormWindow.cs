@@ -83,6 +83,7 @@ namespace WindowsFormsApp1
             if (e.KeyChar == ' ')
             {
                 simulation.play = !simulation.play;
+                simulation.interval = 0.01;
             }
             if (e.KeyChar == '-')
             {

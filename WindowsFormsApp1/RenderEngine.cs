@@ -102,27 +102,28 @@ namespace WindowsFormsApp1
                 double seconds = (DateTime.Now - lastFrame).TotalSeconds;
                 lastFrame = DateTime.Now;
                 fps = Math.Round(smoothFactor / seconds, 1);
+                simulation.interval = 1.0 / fps;
                 ups = Math.Round(updateCount / seconds, 1);
                 updateCount = 0;
             }
 
-            renderStatString($"FPS: {fps}", dc);
-            renderStatString($"UPS: {ups}", dc);
-            renderStatString($"Interval: {simulation.interval}", dc);
-            renderStatString($"Dilation: {simulation.desiredTimeDilation}", dc);
-            renderStatString($"SimDegree: {simulation.simDegree}", dc);
-            renderStatString($"dtUpdate: {simulation.interval * simulation.desiredTimeDilation / simulation.simDegree}", dc);
-            renderStatString($"dtFrame: {simulation.interval * simulation.desiredTimeDilation}", dc);
-            renderStatString($"dtSecond: {simulation.interval * simulation.desiredTimeDilation * fps}", dc);
+            renderStatString("FPS", fps, 2, dc);
+            renderStatString("UPS", ups, 2, dc);
+            renderStatString("Interval", fps, 2, dc);
+            renderStatString("Dilation", simulation.desiredTimeDilation, 0, dc);
+            renderStatString("SimDegree", simulation.simDegree, 0, dc);
+            renderStatString("dtUpdate", simulation.interval * simulation.desiredTimeDilation / simulation.simDegree, 2, dc);
+            renderStatString("dtFrame", simulation.interval * simulation.desiredTimeDilation, 2, dc);
+            renderStatString("dtSecond", simulation.interval * simulation.desiredTimeDilation * fps, 2, dc);
         }
 
-        internal void renderStatString(String str, Graphics dc)
+        internal void renderStatString(String str, double stat, int round, Graphics dc)
         {
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(System.Drawing.Color.Black);
 
             StringFormat drawFormat = new StringFormat();
-            dc.DrawString(str, drawFont, drawBrush, 10.0F, staty, drawFormat);
+            dc.DrawString($"{str}: {Math.Round(stat, round)}", drawFont, drawBrush, 10.0F, staty, drawFormat);
             staty += statyDY;
         }
 
