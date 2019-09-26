@@ -21,6 +21,7 @@ namespace WindowsFormsApp1
             calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
             updateBodies(universe);
+            // TODO: change body reference frame if appropriate
             //removeFlaggedObjects(ref universe);
             fixBarycenter(universe);
         }
