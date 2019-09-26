@@ -141,6 +141,44 @@ namespace WindowsFormsApp1
             //renderBodyInfoBox(dc, body, windowPosition);
         }
 
+        internal Vector WindowCoord(Vector position)
+        {
+            // position should already be realtive to the focus
+            return position * scale + baseWindowOffset;
+        }
+
+        internal void renderArrow(Graphics dc, Pen pen, Vector startPos, Vector endPos)
+        {
+            renderWindowArrow(dc, pen, WindowCoord(startPos), WindowCoord(endPos));
+        }
+
+        internal void renderWindowArrow(Graphics dc, Pen pen, Vector startPos, Vector endPos)
+        {
+            if (startPos.mag() > baseWindowOffset.mag() * 3 || 
+                endPos.mag() > baseWindowOffset.mag() * 3)
+            {
+                //do not render things well outside of window
+                //TODO: if line passes through window, try to detect and render that part
+                return;
+            }
+
+            Vector body = endPos - startPos;
+            double theta = Math.Atan2(body.y, body.x);
+            double thetaH1 = 0.75 * Math.PI + theta;
+            double thetaH2 = 1.25 * Math.PI + theta;
+            Vector H1 = body.mag() / 10.0 * new Vector(Math.Cos(thetaH1), Math.Sin(thetaH1), 0);
+            Vector H2 = body.mag() / 10.0 * new Vector(Math.Cos(thetaH2), Math.Sin(thetaH2), 0);
+
+            renderLine(dc, pen, startPos, endPos);
+            renderLine(dc, pen, endPos, endPos + H1);
+            renderLine(dc, pen, endPos, endPos + H2);
+        }
+
+        internal void renderLine(Graphics dc, Pen pen, Vector startPos, Vector endPos)
+        {
+            dc.DrawLine(pen, (float)startPos.x, (float)startPos.y, (float)endPos.x, (float)endPos.y);
+        }
+
         internal void RenderUniverseFromFocus(Graphics dc, Pen pen, Universe universe, RelativeBody focus)
         {
             RelativeBody center = (RelativeBody)universe.GetBodies().First(); // TODO: better handle binary-type cases
@@ -162,6 +200,7 @@ namespace WindowsFormsApp1
             RelativeBody parent = body.parent;
             if (parent != null)
             {
+                renderArrow(dc, pen, pOffset - body.p, pOffset);
                 RecursiveRenderChildren(dc, pen, parent, pOffset - body.p, body);
                 RecursiveRenderParents(dc, pen, parent, pOffset - body.p);
             }
@@ -174,6 +213,7 @@ namespace WindowsFormsApp1
             {
                 if (child != skip)
                 {
+                    renderArrow(dc, pen, pOffset, pOffset + child.p);
                     RecursiveRenderChildren(dc, pen, child, pOffset + child.p);
                 }
             }
