@@ -24,6 +24,13 @@ namespace WindowsFormsApp1
         internal float staty = 10.0F;
         internal const float statyDY = 12;
         public volatile int updateCount = 0;
+
+        public bool renderPerfStats = true;
+        public bool renderReferenceLines = false;
+        public bool useMinBodyRadius = false;
+        public bool hideSmallBodies = false;
+        public double minBodyRadius = 2.0;
+        public double radiusScale = 1.0;
         
         public RenderEngine()
         {
@@ -66,7 +73,10 @@ namespace WindowsFormsApp1
             renderBodies(dc, simulation.universe);
 
             staty = 10.0F;
-            renderPerformanceStats(simulation, dc);
+            if (renderPerfStats)
+            {
+                RenderPerformanceStats(simulation, dc);
+            }
             
             //Debug.WriteLine(((DateTime.Now)-start).TotalMilliseconds);
         }
@@ -93,7 +103,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        internal void renderPerformanceStats(Simulation simulation, Graphics dc)
+        internal void RenderPerformanceStats(Simulation simulation, Graphics dc)
         {
             fpsSmooth++;
             if (fpsSmooth == smoothFactor)
@@ -137,8 +147,15 @@ namespace WindowsFormsApp1
                 return;
             }
             //renderCircle(dc, pen, windowPosition, Math.Max(Math.Pow(body.m, 1.0 / 3.0), 0.25) * scale);
-            renderCircle(dc, pen, windowPosition, body.r * scale);
-            //renderBodyInfoBox(dc, body, windowPosition);
+            double radius = body.r * scale * radiusScale;
+            if (useMinBodyRadius && !hideSmallBodies)
+            {
+                radius = radius < minBodyRadius ? minBodyRadius : radius;
+            }
+            if (!useMinBodyRadius || !hideSmallBodies || radius >= minBodyRadius)
+            {
+                renderCircle(dc, pen, windowPosition, radius);
+            }
         }
 
         internal Vector WindowCoord(Vector position)
@@ -200,7 +217,10 @@ namespace WindowsFormsApp1
             RelativeBody parent = body.parent;
             if (parent != null)
             {
-                renderArrow(dc, pen, pOffset - body.p, pOffset);
+                if (renderReferenceLines)
+                {
+                    renderArrow(dc, pen, pOffset - body.p, pOffset);
+                }
                 RecursiveRenderChildren(dc, pen, parent, pOffset - body.p, body);
                 RecursiveRenderParents(dc, pen, parent, pOffset - body.p);
             }
@@ -213,7 +233,10 @@ namespace WindowsFormsApp1
             {
                 if (child != skip)
                 {
-                    renderArrow(dc, pen, pOffset, pOffset + child.p);
+                    if (renderReferenceLines)
+                    {
+                        renderArrow(dc, pen, pOffset, pOffset + child.p);
+                    }
                     RecursiveRenderChildren(dc, pen, child, pOffset + child.p);
                 }
             }
