@@ -87,15 +87,19 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void AdoptChild(RelativeBody child)
+        /// <summary>
+        /// Adds the child to this body's list of children, removes from old parent's children, and sets child's parent to this
+        /// </summary>
+        /// <param name="child">The body being 'adopted'</param>
+        public void AdoptChild(RelativeBody child)
         {
             if (!children.Contains(child))
             {
                 if (child.parent != null && child.parent != this)
                 {
                     child.parent.AbandonChild(child);
-                    child.parent = this;
                 }
+                child.parent = this;
                 children.Add(child);
             }
         }

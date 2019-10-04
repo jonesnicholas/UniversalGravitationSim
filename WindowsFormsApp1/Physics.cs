@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
             calcBodyTrajectory(universe, dt);
             //checkCollision(universe);
             updateBodies(universe);
-            // TODO: change body reference frame if appropriate
+            UpdateReferenceFramesIfNecessary(universe);
             //removeFlaggedObjects(ref universe);
             fixBarycenter(universe);
         }
@@ -206,6 +206,32 @@ namespace WindowsFormsApp1
             // need to adjust the position/velocity vectors to account for the fact that reference frames are moving and accelerating.
             RelativeBody center = (RelativeBody) universe.GetBodies().First(); //TODO: rewrite to handle binary-style cases
             center.correctForMovingReferenceFrames(dt);
+        }
+
+        internal void UpdateReferenceFramesIfNecessary(Universe universe)
+        {
+            if (!universe.useRelative)
+            {
+                return; //non-relative mode doesn't use reference frames
+            }
+
+            foreach (RelativeBody body in universe.GetBodies())
+            {
+                // If body leaves Hill sphere of parent, set reference frame to grandparent.
+                // TODO: Look into precomputing hill sphere radius
+                if (body.parent != null && body.parent.parent != null)
+                {
+                    double hillRad = body.parent.p.mag() * Math.Pow(body.parent.m / 3.0 / body.parent.parent.m, 1.0 / 3.0);
+                    if (body.p.mag() > hillRad)
+                    {
+                        body.p += body.parent.p;
+                        body.v += body.parent.v;
+                        (body.parent.parent as RelativeBody).AdoptChild(body);
+                    }
+                }
+                // TODO: check to see if body has entered hill sphere of any more-massive siblings.
+
+            }
         }
     }
 }
