@@ -65,8 +65,8 @@ namespace WindowsFormsApp1
         public Body(double px0, double py0, Body center, double m0, double rho0 = 1, string lbl = "<>")
         {
             p = new Vector(px0, py0, 0);
-            double vMag = Math.Sqrt(center.m / p.mag());
-            Vector pN = p.normal();
+            double vMag = Math.Sqrt(center.m / p.Mag());
+            Vector pN = p.Normal();
             v = new Vector(-pN.y * vMag, pN.x * vMag, 0);
             v += center.v;
             p += center.p;
@@ -79,8 +79,8 @@ namespace WindowsFormsApp1
         public Body(Vector p0, Body center, double m0, double rho0 = 1, string lbl = "<>")
         {
             p = p0;
-            double vMag = Math.Sqrt(center.m / p0.mag());
-            Vector pN = p.normal();
+            double vMag = Math.Sqrt(center.m / p0.Mag());
+            Vector pN = p.Normal();
             v = new Vector(-pN.y * vMag, pN.x * vMag,0);
             v += center.v;
             p += center.p;

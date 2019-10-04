@@ -39,10 +39,10 @@ namespace UnitTests
         [TestMethod]
         public void Vector_Verify_RandVect()
         {
-            Vector randA = Vector.randVect();
-            Vector randB = Vector.randVect();
+            Vector randA = Vector.RandVect();
+            Vector randB = Vector.RandVect();
             Assert.IsNotNull(randA);
-            Assert.AreNotEqual(0, randA.mag());
+            Assert.AreNotEqual(0, randA.Mag());
             Assert.AreNotEqual(randA.x, randB.x);
             Assert.AreNotEqual(randA.y, randB.y);
 
@@ -59,7 +59,7 @@ namespace UnitTests
 
             double square = rx * rx + ry * ry + rz * rz;
             Vector vector = new Vector(rx, ry, rz);
-            checkRoughlyEqual(square, vector.mag() * vector.mag());
+            checkRoughlyEqual(square, vector.Mag() * vector.Mag());
 
             checkRoughlyEqual(rx, vector.x);
             checkRoughlyEqual(ry, vector.y);
@@ -70,25 +70,25 @@ namespace UnitTests
         [TestMethod]
         public void Vector_Verify_Normalization()
         {
-            Vector vector = Vector.randVect();
-            double magnitude = vector.mag();
-            Vector normal = vector.normal();
+            Vector vector = Vector.RandVect();
+            double magnitude = vector.Mag();
+            Vector normal = vector.Normal();
 
-            Assert.AreEqual(magnitude, vector.mag());
-            checkRoughlyEqual(1, normal.mag());
+            Assert.AreEqual(magnitude, vector.Mag());
+            checkRoughlyEqual(1, normal.Mag());
             Assert.IsTrue(normal * magnitude == vector);
 
-            vector.normalize();
+            vector.Normalize();
 
-            checkRoughlyEqual(1, vector.mag());
+            checkRoughlyEqual(1, vector.Mag());
             Assert.IsTrue(vector == normal);
         }
 
         [TestMethod]
         public void Vector_Verify_Operator_Equals()
         {
-            Vector randA = Vector.randVect();
-            Vector randB = Vector.randVect();
+            Vector randA = Vector.RandVect();
+            Vector randB = Vector.RandVect();
             Vector randAEqual = new Vector(randA.x, randA.y, randA.z);
             Vector nullVec = null;
 
@@ -102,8 +102,8 @@ namespace UnitTests
         [TestMethod]
         public void Vector_Verify_Operator_NotEquals()
         {
-            Vector randA = Vector.randVect();
-            Vector randB = Vector.randVect();
+            Vector randA = Vector.RandVect();
+            Vector randB = Vector.RandVect();
             Vector randAEqual = new Vector(randA.x, randA.y, randA.z);
             Vector nullVec = null;
 

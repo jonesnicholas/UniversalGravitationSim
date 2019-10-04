@@ -43,7 +43,7 @@ namespace WindowsFormsApp1
             {
                 foreach(RelativeBody body in universe.GetBodies())
                 {
-                    double bodyD = body.GetAbsP().mag();
+                    double bodyD = body.GetAbsP().Mag();
                     maxD = bodyD > maxD ? bodyD : maxD;
                 }
             }
@@ -51,7 +51,7 @@ namespace WindowsFormsApp1
             {
                 foreach (RelativeBody body in universe.GetBodies())
                 {
-                    double bodyD = body.p.mag();
+                    double bodyD = body.p.Mag();
                     maxD = bodyD > maxD ? bodyD : maxD;
                 }
             }
@@ -141,7 +141,7 @@ namespace WindowsFormsApp1
         {
             pOffset = pOffset == null ? (focus != null ? body.p - focus.p : body.p) : pOffset;
             Vector windowPosition = pOffset * scale + baseWindowOffset;
-            if (windowPosition.mag() > baseWindowOffset.mag() * 3)
+            if (windowPosition.Mag() > baseWindowOffset.Mag() * 3)
             {
                 //do not render things well outside of window
                 return;
@@ -171,8 +171,8 @@ namespace WindowsFormsApp1
 
         internal void renderWindowArrow(Graphics dc, Pen pen, Vector startPos, Vector endPos)
         {
-            if (startPos.mag() > baseWindowOffset.mag() * 3 || 
-                endPos.mag() > baseWindowOffset.mag() * 3)
+            if (startPos.Mag() > baseWindowOffset.Mag() * 3 || 
+                endPos.Mag() > baseWindowOffset.Mag() * 3)
             {
                 //do not render things well outside of window
                 //TODO: if line passes through window, try to detect and render that part
@@ -183,8 +183,8 @@ namespace WindowsFormsApp1
             double theta = Math.Atan2(body.y, body.x);
             double thetaH1 = 0.75 * Math.PI + theta;
             double thetaH2 = 1.25 * Math.PI + theta;
-            Vector H1 = body.mag() / 10.0 * new Vector(Math.Cos(thetaH1), Math.Sin(thetaH1), 0);
-            Vector H2 = body.mag() / 10.0 * new Vector(Math.Cos(thetaH2), Math.Sin(thetaH2), 0);
+            Vector H1 = body.Mag() / 10.0 * new Vector(Math.Cos(thetaH1), Math.Sin(thetaH1), 0);
+            Vector H2 = body.Mag() / 10.0 * new Vector(Math.Cos(thetaH2), Math.Sin(thetaH2), 0);
 
             renderLine(dc, pen, startPos, endPos);
             renderLine(dc, pen, endPos, endPos + H1);

@@ -15,9 +15,9 @@ namespace UnitTests
         {
             RelativeBody empty = new RelativeBody();
 
-            Vector p0 = Vector.randVect();
+            Vector p0 = Vector.RandVect();
             double mass = random.NextDouble();
-            Vector v0 = Vector.randVect();
+            Vector v0 = Vector.RandVect();
             double rho = random.NextDouble();
             string name = "test";
             RelativeBody relBody = new RelativeBody(p0, empty, mass, v0, rho, name);
@@ -42,13 +42,13 @@ namespace UnitTests
                 bool xPos = quad == 1 || quad == 4;
                 bool yPos = quad == 1 || quad == 2;
 
-                Vector p0 = separation * Vector.randVect().normal();
+                Vector p0 = separation * Vector.RandVect().Normal();
                 p0.x *= xPos ? 1 : -1;
                 p0.y *= yPos ? 1 : -1;
-                checkRoughlyEqual(separation, p0.mag());
+                checkRoughlyEqual(separation, p0.Mag());
 
                 RelativeBody relBody = new RelativeBody(p0,center, 1);
-                checkRoughlyEqual(Math.Sqrt(centerMass / separation), relBody.v.mag());
+                checkRoughlyEqual(Math.Sqrt(centerMass / separation), relBody.v.Mag());
                 checkRoughlyEqual(0, relBody.p * relBody.v);
             }
         }
@@ -61,7 +61,7 @@ namespace UnitTests
             RelativeBody reference = center;
             for (int i=0; i<layers; i++)
             {
-                reference = new RelativeBody(Vector.randVect(), parentBody: reference);
+                reference = new RelativeBody(Vector.RandVect(), parentBody: reference);
             }
             Assert.AreEqual(layers, reference.parentDepth());
         }
@@ -95,7 +95,7 @@ namespace UnitTests
                 Vector totalSeparation = new Vector();
                 for (int i=0; i<layers; i++)
                 {
-                    Vector p0 = Vector.randVect();
+                    Vector p0 = Vector.RandVect();
                     totalSeparation += p0;
                     outer = new RelativeBody(p0, parentBody: outer);
                 }

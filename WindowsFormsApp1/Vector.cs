@@ -31,20 +31,32 @@ namespace WindowsFormsApp1
             // default is zero vector
         }
 
-        public static Vector randVect()
+        /// <summary>
+        /// Generates a random 2D vector (x, y, 0.0)
+        /// </summary>
+        /// <returns>a 2D vector with random x and y components</returns>
+        public static Vector RandVect()
         {
             //2D only for now
             return new Vector(random.NextDouble(), random.NextDouble(), 0.0);
         }
 
-        public double mag()
+        /// <summary>
+        /// Gets the magnitude of the vector
+        /// </summary>
+        /// <returns>the magnitude of the vector</returns>
+        public double Mag()
         {
             return Math.Sqrt(x * x + y * y + z * z);
         }
 
-        public void normalize()
+        /// <summary>
+        /// Normalizes the vector, keeping the direction the same, but changing the magnitude to 1. 
+        /// If the vector is the zero vector, keep as is
+        /// </summary>
+        public void Normalize()
         {
-            double m = mag();
+            double m = Mag();
             if (m == 0)
                 return;
             x /= m;
@@ -53,10 +65,14 @@ namespace WindowsFormsApp1
             m = 1;
         }
 
-        public Vector normal()
+        /// <summary>
+        /// Generates the unit vector associated with the current vector. If the vector is the zero vector, return a zero vector
+        /// </summary>
+        /// <returns>a new vector with same direction but magnitude 1</returns>
+        public Vector Normal()
         {
             Vector output = new Vector(x, y, z);
-            double m = mag();
+            double m = Mag();
             if (m != 0)
             {
                 output /= m;
@@ -75,7 +91,7 @@ namespace WindowsFormsApp1
             {
                 return false;
             }
-            return checkRoughlyEqual(a, b);
+            return CheckRoughlyEqual(a, b);
         }
 
         public static bool operator !=(Vector a, Vector b)
@@ -129,9 +145,16 @@ namespace WindowsFormsApp1
         }
         #endregion
 
-        internal static bool checkRoughlyEqual(Vector expected, Vector actual)
+        /// <summary>
+        /// Determines if two vectors are close enough to be considered 'equal'
+        /// Should only be used for unit tests
+        /// </summary>
+        /// <param name="expected">Expected value of Vector</param>
+        /// <param name="actual">Actual value of Vector</param>
+        /// <returns>if the vectors are roughly equal</returns>
+        internal static bool CheckRoughlyEqual(Vector expected, Vector actual)
         {
-            double scale = Math.Max(expected.mag(), actual.mag());
+            double scale = Math.Max(expected.Mag(), actual.Mag());
             double epsilon = scale * 1E-15;
             if (Math.Abs(expected.x - actual.x) > epsilon)
             {

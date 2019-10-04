@@ -30,8 +30,8 @@ namespace UnitTests
                 for (int i=0; i<numBodies; i++)
                 {
                     Body b = tf ? new Body() : new RelativeBody();
-                    b.p = Vector.randVect();
-                    Vector rVecNext = Vector.randVect();
+                    b.p = Vector.RandVect();
+                    Vector rVecNext = Vector.RandVect();
                     newVects.Add(rVecNext);
                     b.pNext = rVecNext;
                     universe.AddBody(b);
@@ -74,11 +74,11 @@ namespace UnitTests
         public void Physics_Verify_Absolute_Distance()
         {
             Body bodyA = new Body();
-            Vector vecA = Vector.randVect();
+            Vector vecA = Vector.RandVect();
             bodyA.p = vecA;
 
             Body bodyB = new Body();
-            Vector vecB = Vector.randVect();
+            Vector vecB = Vector.RandVect();
             bodyB.p = vecB;
 
             Vector manDist = vecB - vecA;
@@ -94,13 +94,13 @@ namespace UnitTests
         public void Physics_Verify_Relative_Distance()
         {
             RelativeBody s = new RelativeBody();
-            Vector p1p = Vector.randVect();
+            Vector p1p = Vector.RandVect();
             RelativeBody p1 = new RelativeBody(p1p,parentBody:s);
-            Vector p1m1p = Vector.randVect();
+            Vector p1m1p = Vector.RandVect();
             RelativeBody p1m1 = new RelativeBody(p1m1p, parentBody:p1);
-            Vector p2p = Vector.randVect();
+            Vector p2p = Vector.RandVect();
             RelativeBody p2 = new RelativeBody(p2p, parentBody:s);
-            Vector p2m1p = Vector.randVect();
+            Vector p2m1p = Vector.RandVect();
             RelativeBody p2m1 = new RelativeBody(p2m1p, parentBody:p2);
 
             Physics physics = new Physics();

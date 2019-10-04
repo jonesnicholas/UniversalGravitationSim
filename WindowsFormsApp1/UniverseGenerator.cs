@@ -48,7 +48,7 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        mag = host.p.mag() * Math.Pow(host.m / (3 * host.parent.m), 0.333) / 4.0;
+                        mag = host.p.Mag() * Math.Pow(host.m / (3 * host.parent.m), 0.333) / 4.0;
                     }
                     mag *= random.NextDouble();
                     double theta = random.NextDouble() * Math.PI * 2;

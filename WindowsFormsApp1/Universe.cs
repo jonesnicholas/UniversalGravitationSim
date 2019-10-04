@@ -56,7 +56,7 @@ namespace WindowsFormsApp1
         public void RecursiveAdd(RelativeBody body, List<Body> list)
         {
             list.Add(body);
-            body.children = body.children.OrderBy(child => child.p.mag()).ToList();
+            body.children = body.children.OrderBy(child => child.p.Mag()).ToList();
             foreach(RelativeBody child in body.children)
             {
                 RecursiveAdd(child, list);

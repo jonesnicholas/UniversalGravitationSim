@@ -42,8 +42,8 @@ namespace WindowsFormsApp1
             v = parent == null ? new Vector() : inV;
             if (v == null)
             {
-                Vector pN = p.normal();
-                double mag = Math.Sqrt(parent.m / p.mag());
+                Vector pN = p.Normal();
+                double mag = Math.Sqrt(parent.m / p.Mag());
                 v = mag * (new Vector(-pN.y, pN.x, pN.z));
             }
             rho = rho0;
@@ -65,8 +65,8 @@ namespace WindowsFormsApp1
             v = parent == null ? new Vector() : inV;
             if (v == null)
             {
-                Vector pN = p.normal();
-                double mag = Math.Sqrt(parent.m / p.mag());
+                Vector pN = p.Normal();
+                double mag = Math.Sqrt(parent.m / p.Mag());
                 v = mag * (new Vector(-pN.y, pN.x, pN.z));
             }
             rho = rho0;

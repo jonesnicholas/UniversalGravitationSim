@@ -93,7 +93,7 @@ namespace WindowsFormsApp1
                     }
                     Vector pRel = a.pNext - b.pNext;
                     double r = a.r + b.r;
-                    if (pRel.mag() < r)
+                    if (pRel.Mag() < r)
                     {
                         b.deletionFlag = true;
                         a.vNext = (a.m * a.vNext + b.m * b.vNext) / (a.m + b.m);
@@ -136,7 +136,7 @@ namespace WindowsFormsApp1
                 }
                 Vector dist = distance(body, other, universe.useRelative);
                 //Debug.WriteLine(dist.ToString());
-                a += universe.G * other.m * dist.normal() / (Math.Pow(dist.mag(), 2));
+                a += universe.G * other.m * dist.Normal() / (Math.Pow(dist.Mag(), 2));
             }
             //Debug.WriteLine(body.name + a.ToString());
             return a;
@@ -221,8 +221,8 @@ namespace WindowsFormsApp1
                 // TODO: Look into precomputing hill sphere radius
                 if (body.parent != null && body.parent.parent != null)
                 {
-                    double hillRad = body.parent.p.mag() * Math.Pow(body.parent.m / 3.0 / body.parent.parent.m, 1.0 / 3.0);
-                    if (body.p.mag() > hillRad)
+                    double hillRad = body.parent.p.Mag() * Math.Pow(body.parent.m / 3.0 / body.parent.parent.m, 1.0 / 3.0);
+                    if (body.p.Mag() > hillRad)
                     {
                         body.p += body.parent.p;
                         body.v += body.parent.v;
