@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
 
         public Body()
         {
-            initialize();
+            Initialize();
         }
 
         public Body(double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
@@ -38,7 +38,7 @@ namespace WindowsFormsApp1
             m = m0;
             pinned = pin;
             name = lbl;
-            initialize();
+            Initialize();
         }
 
         public Body(double px0, double py0, double vx0, double vy0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
@@ -49,7 +49,7 @@ namespace WindowsFormsApp1
             m = m0;
             pinned = pin;
             name = lbl;
-            initialize();
+            Initialize();
         }
 
         public Body(Vector p0, Vector v0, double m0, double rho0 = 1, bool pin = false, string lbl = "<>")
@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
             m = m0;
             pinned = pin;
             name = lbl;
-            initialize();
+            Initialize();
         }
         public Body(double px0, double py0, Body center, double m0, double rho0 = 1, string lbl = "<>")
         {
@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
             rho = rho0;
             m = m0;
             name = lbl;
-            initialize();
+            Initialize();
         }
 
         public Body(Vector p0, Body center, double m0, double rho0 = 1, string lbl = "<>")
@@ -87,11 +87,15 @@ namespace WindowsFormsApp1
             rho = rho0;
             m = m0;
             name = lbl;
-            initialize();
+            Initialize();
         }
         #endregion  
 
-        public void update()
+        /// <summary>
+        /// Updates the position and velocity to match the 'next' position and velocity as calculated by the physics engine.
+        /// Does nothing if the body is 'pinned'
+        /// </summary>
+        public void UpdateBodyPV()
         {
             if (pinned)
                 return;
@@ -99,12 +103,18 @@ namespace WindowsFormsApp1
             v = vNext;
         }
 
-        public virtual void initialize()
+        /// <summary>
+        /// Runs any code needed to initialize the body
+        /// </summary>
+        public virtual void Initialize()
         {
-            estR();
+            EstR();
         }
 
-        public void estR()
+        /// <summary>
+        /// Estimates the radius of the body based on mass and density
+        /// </summary>
+        public void EstR()
         {
             r = Math.Pow(m / rho * 3.0 / 4.0 / Math.PI, 1.0 / 3.0);
         }

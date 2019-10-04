@@ -18,13 +18,13 @@ namespace WindowsFormsApp1
             parent = null;
             name = lbl;
             m = m0;
-            initialize();
+            Initialize();
         }
 
         public RelativeBody(RelativeBody parentBody)
         {
             parent = parentBody;
-            initialize();
+            Initialize();
         }
 
         public RelativeBody(
@@ -49,7 +49,7 @@ namespace WindowsFormsApp1
             rho = rho0;
             m = m0;
             name = lbl;
-            initialize();
+            Initialize();
         }
 
         public RelativeBody(
@@ -72,13 +72,13 @@ namespace WindowsFormsApp1
             rho = rho0;
             m = m0;
             name = lbl;
-            initialize();
+            Initialize();
         }
         #endregion  
 
-        public override void initialize()
+        public override void Initialize()
         {
-            base.initialize();
+            base.Initialize();
             //pinned = parent == null; //TODO: Work-around this, need soln for binary objects
             children = new List<RelativeBody>();
             if (this.parent != null)

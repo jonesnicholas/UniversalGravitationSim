@@ -63,7 +63,7 @@ namespace WindowsFormsApp1
         {
             foreach (Body body in universe.GetBodies())
             {
-                body.update();
+                body.UpdateBodyPV();
             }
         }
 
@@ -99,7 +99,7 @@ namespace WindowsFormsApp1
                         a.vNext = (a.m * a.vNext + b.m * b.vNext) / (a.m + b.m);
                         a.rho = (a.m + b.m) / ((a.m / a.rho) + (b.m / b.rho));
                         a.m += b.m;
-                        a.estR();
+                        a.EstR();
                     }
                 }
             }
