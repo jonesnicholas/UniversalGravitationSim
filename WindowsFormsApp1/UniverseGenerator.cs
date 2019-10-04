@@ -130,6 +130,7 @@ namespace WindowsFormsApp1
 
         public static Universe PseudoRealSolarSystem(bool useRel = false)
         {
+            //TODO: Try to scrape this from ephemeris data
             Universe universe = new Universe(useRel, 6.67e-11);
             if (useRel)
             {
