@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
         {
             this.simulation = sim;
             this.InitializeComponent();
-            this.frameTimer.Tick += new EventHandler(this.frame_Timer_Tick);
+            this.frameTimer.Tick += new EventHandler(this.Frame_Timer_Tick);
             double targetFPS = 120;
             this.frameTimer.Interval = (int)Math.Ceiling(1000.0 / targetFPS);
             this.frameTimer.Enabled = true;
@@ -33,7 +33,7 @@ namespace WindowsFormsApp1
             this.Focus();
         }
 
-        void frame_Timer_Tick(object sender, EventArgs e)
+        void Frame_Timer_Tick(object sender, EventArgs e)
         {
             this.Invalidate();
         }
@@ -49,8 +49,7 @@ namespace WindowsFormsApp1
 
         bool IsApplicationIdle()
         {
-            NativeMessage result;
-            return PeekMessage(out result, IntPtr.Zero, (uint)0, (uint)0, (uint)0) == 0;
+            return PeekMessage(out NativeMessage result, IntPtr.Zero, (uint)0, (uint)0, (uint)0) == 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]

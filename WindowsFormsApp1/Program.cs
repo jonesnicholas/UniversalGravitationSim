@@ -18,8 +18,10 @@ namespace WindowsFormsApp1
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Simulation sim = new Simulation();
-            FormWindow mainWindow = new FormWindow(sim);
-            mainWindow.Size = new Size(400, 300);
+            FormWindow mainWindow = new FormWindow(sim)
+            {
+                Size = new Size(400, 300)
+            };
             sim.formWindow = mainWindow;
             //Universe test = UniverseGenerator.GenPseudoRandomUniverse(seed: 1);
             Universe rss = UniverseGenerator.PseudoRealSolarSystem(true);

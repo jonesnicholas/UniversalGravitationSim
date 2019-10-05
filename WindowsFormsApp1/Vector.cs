@@ -87,7 +87,7 @@ namespace WindowsFormsApp1
             {
                 return true;
             }
-            if (ReferenceEquals(a,null) || ReferenceEquals(b,null))
+            if (a == null || b == null)
             {
                 return false;
             }

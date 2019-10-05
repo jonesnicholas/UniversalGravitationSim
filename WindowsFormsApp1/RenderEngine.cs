@@ -38,6 +38,10 @@ namespace WindowsFormsApp1
 
         public void BaseScaleForUniverse(Form form, Universe universe, double correction = 1.0)
         {
+            if (form == null)
+            {
+                return;
+            }
             double maxD = 0;
             if (universe.useRelative)
             {
@@ -63,7 +67,7 @@ namespace WindowsFormsApp1
         {
             DateTime start = DateTime.Now;
             
-            focus = newFocus == null ? focus : newFocus;
+            focus = newFocus ?? focus;
             baseWindowOffset = new Vector(form.ClientRectangle.Width / 2.0, form.ClientRectangle.Height / 2.0,0);
             Graphics dc = e.Graphics;
             dc.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -139,7 +143,7 @@ namespace WindowsFormsApp1
 
         internal void renderBody(Graphics dc, Pen pen, Body body, Vector pOffset = null)
         {
-            pOffset = pOffset == null ? (focus != null ? body.p - focus.p : body.p) : pOffset;
+            pOffset = pOffset ?? (focus != null ? body.p - focus.p : body.p);
             Vector windowPosition = pOffset * scale + baseWindowOffset;
             if (windowPosition.Mag() > baseWindowOffset.Mag() * 3)
             {

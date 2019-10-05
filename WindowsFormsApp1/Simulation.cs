@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
 
         public void initialize(Universe uni = null, bool relative = false)
         {
-            universe = uni == null ? UniverseGenerator.GenerateTestUniverse(relative) : uni;
+            universe = uni ?? UniverseGenerator.GenerateTestUniverse(relative);
             physics = new Physics();
             renderEngine.BaseScaleForUniverse(formWindow, universe);
         }
