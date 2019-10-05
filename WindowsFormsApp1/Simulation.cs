@@ -41,7 +41,7 @@ namespace WindowsFormsApp1
             }
             for (int i=0; i<simDegree; i++)
             {
-                physics.update(ref universe, dt);
+                physics.Update(ref universe, dt);
                 renderEngine.updateCount++;
             }
             double timeInterval = (start - DateTime.Now).TotalSeconds;

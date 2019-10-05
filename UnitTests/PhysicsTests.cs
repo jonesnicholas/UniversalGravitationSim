@@ -36,7 +36,7 @@ namespace UnitTests
                     b.pNext = rVecNext;
                     universe.AddBody(b);
                 }
-                physics.updateBodies(universe);
+                physics.UpdateBodies(universe);
                 for (int i=0; i<numBodies; i++)
                 {
                     Assert.IsTrue(newVects[i] == universe.GetBodies()[i].p);
@@ -65,7 +65,7 @@ namespace UnitTests
                     }
                     universe.AddBody(b);
                 }
-                physics.removeFlaggedObjects(ref universe);
+                physics.RemoveFlaggedObjects(ref universe);
                 Assert.AreEqual(numBodies - countFlagged, universe.GetBodies().Count);
             }
         }
@@ -84,7 +84,7 @@ namespace UnitTests
             Vector manDist = vecB - vecA;
 
             Physics physics = new Physics();
-            Vector dist = physics.distance(bodyA, bodyB, false);
+            Vector dist = physics.Distance(bodyA, bodyB, false);
             Assert.AreEqual(manDist.x, dist.x);
             Assert.AreEqual(manDist.y, dist.y);
             Assert.AreEqual(manDist.z, dist.z);
@@ -105,19 +105,19 @@ namespace UnitTests
 
             Physics physics = new Physics();
 
-            Vector p1Dp2 = physics.distance(p1, p2, true);
+            Vector p1Dp2 = physics.Distance(p1, p2, true);
             Vector p1Dp2EST = p2p - p1p;
             Assert.IsTrue(p1Dp2EST == p1Dp2);
 
-            Vector p1m1Dp2m1 = physics.distance(p1m1, p2m1, true);
+            Vector p1m1Dp2m1 = physics.Distance(p1m1, p2m1, true);
             Vector p1m1Dp2m2EST = p2m1p + p2p - p1m1p - p1p;
             Assert.IsTrue(p1m1Dp2m1 == p1m1Dp2m2EST);
 
-            Vector p1Dp2m1 = physics.distance(p1, p2m1, true);
+            Vector p1Dp2m1 = physics.Distance(p1, p2m1, true);
             Vector p1Dp2m1EST = p2m1p + p2p - p1p;
             Assert.IsTrue(p1Dp2m1 == p1Dp2m1EST);
 
-            Vector p2m1Dp1 = physics.distance(p2m1, p1, true);
+            Vector p2m1Dp1 = physics.Distance(p2m1, p1, true);
             Vector p2m1Dp1EST = p1p - p2m1p - p2p;
             Assert.IsTrue(p2m1Dp1 == p2m1Dp1EST);
         }
